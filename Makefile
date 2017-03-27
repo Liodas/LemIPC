@@ -9,7 +9,7 @@
 ##
 
 
-CC		=       gcc
+CC		=       gcc -g -g3
 
 RM		=       rm -rf
 
