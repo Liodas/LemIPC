@@ -18,25 +18,34 @@ assigned to the current player\n");
   return (-1);
 }
 
-void		initMap(t_player *map)
+void		displayMap(int **map)
 {
   int		x;
   int		y;
-  int		i;
 
   x = -1;
-  i = -1;
+  while (++x < 50)
+    {
+      y = -1;
+      while (++y < 50)
+	printf("%d", map[x][y]);
+      printf("\n");
+    }
+}
+
+int		**initMap(int **map)
+{
+  int		x;
+  int		y;
+
+  x = -1;
   while (++x < 50) /* 50 == width de la map */
     {
       y = -1;
       while (++y < 50) /* 50 == height de la map */
-	{
-	  map[i].x = x;
-	  map[i].y = y;
-	  map[i].team = EMPTY; /* 0 == EMPTY == case vide */
-	  ++i;
-	}
+	map[x][y] = EMPTY; /* 0 == EMPTY == case vide */
     }
+  return (map);
 }
 
 int		initSem(t_struct *desTrucs)
@@ -59,15 +68,14 @@ int		initValues(t_struct *desTrucs, char *path)
 {
   if ((desTrucs->key = ftok(path, 0)) == -1) /* get key */
     return (print_usage());
-  if ((desTrucs->shmId = shmget(desTrucs->key, sizeof(t_player) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
+  if ((desTrucs->shmId = shmget(desTrucs->key, sizeof(int **) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
     {
-      if ((desTrucs->shmId = shmget(desTrucs->key, sizeof(t_player) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
+      if ((desTrucs->shmId = shmget(desTrucs->key, sizeof(int **) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
 	{
 	  /* Rentre ici au PREMIER lancement du prog'
 	     pour le reinitialiser :	-ipcs -m pour la list des shared mem seg
 					-ipcrm [shmid] où le status != dest pour le delete
 	   */
-	  printf("AVANT SHMAT\n");
 	  if ((desTrucs->addr = shmat(desTrucs->shmId, NULL, SHM_R | SHM_W)) == (void *)-1) /* attache la mem partagée au processus  */
 	    return (fprintf(stderr, "Shmat failed\n") - 14);
 	  else
@@ -75,14 +83,12 @@ int		initValues(t_struct *desTrucs, char *path)
 	      if (initMsg(desTrucs) == -1
 		  || initSem(desTrucs) == -1)
 		return (-1);
-	      printf("AVANT INITMAP\n");
-	      initMap(desTrucs->addr);
-	      printf("APRES INITMAP\n");
+	      desTrucs->addr = initMap(desTrucs->addr);
+	      displayMap(desTrucs->addr);
 	      /* TODO : -Créer pion
 		        -Fork entre affichage map && reste
-			-reste = Déplacement - check si mort
+			-reste = Déplacement - check si mort */
 	    }
-	  printf("APRES SHMAT\n");
 	}
     }
 
@@ -92,7 +98,6 @@ int		initValues(t_struct *desTrucs, char *path)
 int		main(int ac, char *av[])
 {
   t_struct	desTrucs;
-  t_player	map;
 
   if (ac != 3)
     return (print_usage());
