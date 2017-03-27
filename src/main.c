@@ -76,9 +76,9 @@ int		initValues(t_struct *core, char *path)
 {
   if ((core->key = ftok(path, 0)) == -1) /* get key */
     return (print_usage());
-  if ((core->shmId = shmget(core->key, sizeof(int **) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
+  if ((core->shmId = shmget(core->key, sizeof(int) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
     {
-      if ((core->shmId = shmget(core->key, sizeof(int **) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
+      if ((core->shmId = shmget(core->key, sizeof(int) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
 	{
 	  if ((core->addr = shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1) /* attache la mem partagée au processus  */
 	    return (fprintf(stderr, "Shmat failed\n") - 14);
@@ -90,8 +90,9 @@ int		initValues(t_struct *core, char *path)
 	      core->addr = initMap(core->addr);
 	      /* displayMap(core->addr); */
 	      /* TODO : -Créer pion
-		        -Fork entre affichage map && reste
-			-reste = Déplacement - check si mort */
+		 -check si mort
+		 -Déplacement
+		 -affichage map */
 	    }
 	}
     }
