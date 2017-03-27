@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Mon Mar 27 19:07:21 2017 gastal_r
+** Last update	Tue Mar 28 00:32:58 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -37,20 +37,21 @@ void		displayMap(int *map)
     }
 }
 
-void    initMap(int *map)
+void    initMap(t_struct *core)
 {
   int		x;
   int		y;
   int		i;
 
   x = -1;
+  //core->addr->map = malloc(sizeof(int) * 50 * 50);
   while (++x < 50)
     {
       y = -1;
       while (++y < 50)
 	{
 	  i = y * 50 + x;
-	  map[i] = EMPTY;
+	  core->addr->map[i] = EMPTY;
 	}
     }
 }
@@ -66,44 +67,99 @@ int		initSem(t_struct *core)
 int		initMsg(t_struct *core)
 {
   if ((core->msgId = msgget(core->key, SHM_R | SHM_W)) == -1) /* get id file de messagesQ  */
+  {
+    printf("Creation du msgID\n");
     if ((core->msgId = msgget(core->key, IPC_CREAT | SHM_R | SHM_W)) == -1)  /* créé nouvelle file de messagesQ si inexistante */
       return (fprintf(stderr, "Msgget failed\n") - 15);
+    }
   return (0);
+}
+
+int   is_alive()
+{
+  return (1);
+}
+
+void  mainloop(t_struct *core)
+{
+  t_msg msg;
+  t_player player;
+
+  player.id = core->addr->players + 1;
+  core->addr->players += 1;
+  while (is_alive())
+  {
+    if (1)
+    {
+      sleep(1);
+      bzero(&msg, sizeof(t_msg));
+      msg.mtype = 666;
+      sprintf(msg.str, "Bonsoir %d", player.id);
+      msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
+      //msgctl(core->msgId, IPC_RMID, NULL);
+      printf("message sended\n");
+      // check msg
+      // check sem
+      // increase players
+      // set team
+      // set in map
+      // move
+      // increase sema
+    }
+  }
 }
 
 int		initValues(t_struct *core, char *path)
 {
+  t_msg msg;
+  int go_on;
+
+  go_on = 1;
   if ((core->key = ftok(path, 0)) == -1) /* get key */
     return (print_usage());
-  if ((core->shmId = shmget(core->key, sizeof(t_shared) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
+  initMsg(core);
+  printf("msgid %d\n", core->msgId);
+  if ((core->shmId = shmget(core->key, sizeof(t_shared) * 50 * 50, SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
     {
-      if ((core->shmId = shmget(core->key, sizeof(t_shared) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
+      if ((core->shmId = shmget(core->key, sizeof(t_shared) * 50 * 50, IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
 	     {
-	      if ((core->addr = shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1) /* attache la mem partagée au processus  */
-	       return (fprintf(stderr, "Shmat failed\n") - 14);
-        if (initMsg(core) == -1 || initSem(core) == -1)
+         printf("shmid %d\n", core->shmId);
+         if ((core->addr = shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1) /* attache la mem partagée au processus  */
+          return (fprintf(stderr, "Shmat failed\n") - 14);
+        printf("%p\n", core->addr);
+        if (initSem(core) == -1)
 		     return (-1);
-	      initMap(core->addr);
-	      displayMap(core->addr);
+	      initMap(core);
+	      displayMap(core->addr->map);
         // create player
-        while (isplayer == true)
+        core->addr->players = 1;
+        core->addr->teams = 1;
+        while (go_on)
         {
+          sleep(1);
+          printf("players= %d  teams=%d\n", core->addr->players, core->addr->teams);
+          bzero(&msg, sizeof(t_msg));
+          printf("Created msg %d\n", core->msgId);
+          msgrcv(core->msgId, &msg, sizeof(t_msg), 666, IPC_NOWAIT);
+          printf("%s\n", msg.str);
+
           // check msg
           // check mort
           // check poto
           // move
         }
-	     }
+      }
 	   }
      else
      {
-       // check msg
-       // check sem
-       // increase players
-       // set team
-       // set in map
-       // move
-       // increase sema
+       //core->addr->teams += 1;
+       printf("%p\n", core->addr);
+       printf("shmid %d\n", core->shmId);
+       if ((core->addr = shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1) /* attache la mem partagée au processus  */
+        return (fprintf(stderr, "Shmat failed\n") - 14);
+       printf("%p\n", core->addr);
+       displayMap(core->addr->map);
+       mainloop(core);
      }
   return (0);
 }
@@ -117,6 +173,6 @@ int		main(int ac, char *av[])
   core.addr = NULL;
   if (initValues(&core, av[1]) == -1)
     return (-1);
-  printf("Key = %d\nShmId = %d\nAddr = %p\nmsgId = %d\n", core.key, core.shmId, core.addr, core.msgId);
+  printf("Key = %d\nShmId = %d\nAddr = %p\nmsgId = %d\n", core.key, core.shmId, core.addr->map, core.msgId);
   return (0);
 }
