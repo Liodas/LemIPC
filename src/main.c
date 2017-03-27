@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Mon Mar 27 14:58:55 2017 gastal_r
+** Last update	Mon Mar 27 19:07:21 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -75,22 +75,36 @@ int		initValues(t_struct *core, char *path)
 {
   if ((core->key = ftok(path, 0)) == -1) /* get key */
     return (print_usage());
-  if ((core->shmId = shmget(core->key, sizeof(int) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
+  if ((core->shmId = shmget(core->key, sizeof(t_shared) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
     {
-      if ((core->shmId = shmget(core->key, sizeof(int) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
+      if ((core->shmId = shmget(core->key, sizeof(t_shared) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
 	     {
 	      if ((core->addr = shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1) /* attache la mem partagée au processus  */
 	       return (fprintf(stderr, "Shmat failed\n") - 14);
         if (initMsg(core) == -1 || initSem(core) == -1)
 		     return (-1);
 	      initMap(core->addr);
-	      /* displayMap(core->addr); */
-	      /* TODO : -Créer pion
-		 -check si mort
-		 -Déplacement
-		 -affichage map */
-	    }
+	      displayMap(core->addr);
+        // create player
+        while (isplayer == true)
+        {
+          // check msg
+          // check mort
+          // check poto
+          // move
+        }
+	     }
 	   }
+     else
+     {
+       // check msg
+       // check sem
+       // increase players
+       // set team
+       // set in map
+       // move
+       // increase sema
+     }
   return (0);
 }
 
@@ -100,8 +114,9 @@ int		main(int ac, char *av[])
 
   if (ac != 3)
     return (print_usage());
+  core.addr = NULL;
   if (initValues(&core, av[1]) == -1)
     return (-1);
-  printf("Key = %d\nShmId = %d\nAddr = %lld\nmsgId = %d\n", core.key, core.shmId, (long long int)core.addr, core.msgId);
+  printf("Key = %d\nShmId = %d\nAddr = %p\nmsgId = %d\n", core.key, core.shmId, core.addr, core.msgId);
   return (0);
 }
