@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Mon Mar 27 14:39:16 2017 gastal_r
+** Last update	Mon Mar 27 14:58:55 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -37,7 +37,7 @@ void		displayMap(int *map)
     }
 }
 
-int		*initMap(int *map)
+void    initMap(int *map)
 {
   int		x;
   int		y;
@@ -53,7 +53,6 @@ int		*initMap(int *map)
 	  map[i] = EMPTY;
 	}
     }
-  return (map);
 }
 
 int		initSem(t_struct *core)
@@ -76,26 +75,21 @@ int		initValues(t_struct *core, char *path)
 {
   if ((core->key = ftok(path, 0)) == -1) /* get key */
     return (print_usage());
-  if ((core->shmId = shmget(core->key, sizeof(int **) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
+  if ((core->shmId = shmget(core->key, sizeof(int) * (50 * 50), SHM_R | SHM_W)) == -1) /* alloc segment mem partagée */
     {
-      if ((core->shmId = shmget(core->key, sizeof(int **) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
-	{
-	  if ((core->addr = shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1) /* attache la mem partagée au processus  */
-	    return (fprintf(stderr, "Shmat failed\n") - 14);
-	  else
-	    {
-	      if (initMsg(core) == -1
-		  || initSem(core) == -1)
-		return (-1);
-	      core->addr = initMap(core->addr);
+      if ((core->shmId = shmget(core->key, sizeof(int) * (50 * 50), IPC_CREAT | SHM_R | SHM_W)) != -1) /* alloc segment mem partagée si segment pas créé */
+	     {
+	      if ((core->addr = shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1) /* attache la mem partagée au processus  */
+	       return (fprintf(stderr, "Shmat failed\n") - 14);
+        if (initMsg(core) == -1 || initSem(core) == -1)
+		     return (-1);
+	      initMap(core->addr);
 	      /* displayMap(core->addr); */
 	      /* TODO : -Créer pion
 		        -Fork entre affichage map && reste
 			-reste = Déplacement - check si mort */
 	    }
-	}
-    }
-
+	   }
   return (0);
 }
 
