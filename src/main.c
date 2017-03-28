@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Tue Mar 28 00:32:58 2017 gastal_r
+** Last update	Tue Mar 28 17:12:24 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -37,8 +37,7 @@ void		displayMap(int *map)
     }
 }
 
-int		checkAround(t_struct *core, t_player player,
-			 int nbEnem, int range)
+int		checkAround(t_struct *core, t_player player, int nbEnem, int range)
 {
   int		i;
   int		x;
@@ -55,36 +54,65 @@ int		checkAround(t_struct *core, t_player player,
 	      core->addr->map[i] != player.team
 	      && y != player.y && x != player.x)
 	    nbEnem++;
-	  printf("X = %d ||| Y = %d\n", x, y);
 	}
     }
   return (nbEnem > 2 ? - 1 : 0);
 }
 
-void  mainloop(t_struct *core, int idTeam)
+void  semOperation(t_struct *core, int op)
+{
+  struct sembuf sops;
+
+  sops.sem_num = 0;
+  sops.sem_flg = 0;
+  sops.sem_op = op;
+  printf("qsdqsdqsdqsdqsdqsd %d\n", op);
+  printf("sembefore=%d\n", semctl(core->semId, 0, GETVAL));
+  semop(core->semId, &sops, 1);
+  printf("semafter=%d\n", semctl(core->semId, 0, GETVAL));
+}
+
+void  i_die_msg(t_struct *core, t_player *player)
 {
   t_msg msg;
-  t_player player;
 
-  initNewPlayer(core, &player, idTeam);
-  while (checkAround(core, player, 0, 1))
+  bzero(&msg, sizeof(t_msg));
+  msg.mtype = player->id + 1;
+  sprintf(msg.str, "Decremente %d", player->id);
+  msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
+  printf("message sended\n");
+  semOperation(core, -1);
+  core->addr->players--;
+}
+
+void  mainloop(t_struct *core, t_player *player)
+{
+  t_msg msg;
+
+  while (1)
   {
-    if (1)
+    sleep(1);
+    bzero(&msg, sizeof(t_msg));
+    msgrcv(core->msgId, &msg, sizeof(t_msg), player->id, IPC_NOWAIT);
+    printf("playerid=%d %s\n",player->id, msg.str);
+    if (strlen(msg.str) > 0)
+      player->id--;
+    printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
+    if (semctl(core->semId, 0, GETVAL) == player->id)
     {
-      sleep(1);
-      bzero(&msg, sizeof(t_msg));
-      msg.mtype = 666;
-      sprintf(msg.str, "Bonsoir %d", player.id);
-      msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
-      //msgctl(core->msgId, IPC_RMID, NULL);
-      printf("message sended\n");
-      // check msg
-      // check sem
-      // increase players
-      // set team
-      // set in map
-      // move
-      // increase sema
+      printf("ITS MY TURN BITCHES\n");
+      if (!checkAround(core, *player, 0, 1))
+      {
+        i_die_msg(core, player);
+        return;
+      };
+      if (semctl(core->semId, 0, GETVAL) == core->addr->players)
+      {
+        semOperation(core, -core->addr->players + 1);
+
+      }
+      else
+        semOperation(core, 1);
     }
   }
 }
@@ -98,7 +126,7 @@ int		main(int ac, char *av[])
   core.addr = NULL;
   if (initValues(&core, av[1], atoi(av[2])) == -1)
     return (-1);
-  
+
   printf("Key = %d\nShmId = %d\nAddr = %p\nmsgId = %d\n", core.key, core.shmId, core.addr->map, core.msgId);
   return (0);
 }
