@@ -31,7 +31,7 @@ void		displayMap(int *map)
       while (++y < 50)
 	{
 	  i = y * 50 + x;
-	  printf("%d ", map[i]);
+	  map[i] != 0 ? printf("%d ", map[i]) : printf(" ");
 	}
       printf("\n");
     }
