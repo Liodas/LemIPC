@@ -23,34 +23,45 @@
 
 # define    EMPTY 0
 
-typedef struct  s_msg
+typedef struct			s_msg
 {
-  long          mtype;
-  char          str[32];
-}               t_msg;
+  long				mtype;
+  char				str[32];
+}				t_msg;
 
-typedef struct	s_player
+typedef struct			s_player
 {
-  int      x;
-  int		   y;
-  int		   team;
-  int      id;
-}		             t_player;
+  int				x;
+  int				y;
+  int				team;
+  int				id;
+}				t_player;
 
-typedef struct   s_shared
+typedef struct			s_shared
 {
-  int      players;
-  int      teams;
-  int      map[0];
-}  __attribute__((packed))  t_shared;
+  int				players;
+  int				teams;
+  int				map[0];
+}  __attribute__((packed))	t_shared;
 
-typedef struct	 s_struct
+typedef struct			s_struct
 {
-  key_t		 key;
-  int	  	 semId;
-  int		   shmId;
-  int		   msgId;
-  t_shared *addr;
-}		             t_struct;
+  key_t				key;
+  int				semId;
+  int				shmId;
+  int				msgId;
+  t_shared			*addr;
+}				t_struct;
+
+void	initNewPlayer(t_struct *, t_player *, int);
+int	initFirstPlayer(t_struct *, int, int);
+int	initValues(t_struct *, char *, int);
+int	initOtherPlayers(t_struct *);
+void	mainloop(t_struct *, int);
+int	initMsg(t_struct *);
+int	initSem(t_struct *);
+void	initMap(t_struct *);
+void	displayMap(int *);
+int	printUsage();
 
 #endif

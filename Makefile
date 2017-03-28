@@ -18,7 +18,9 @@ CFLAGS		+=	-I./includes
 
 NAME		=	lemipc
 
-SRCS		=	src/main.c
+SRCS		=	src/main.c		\
+			src/init.c		\
+			src/init_players.c
 
 OBJS		=	$(SRCS:.c=.o)
 
