@@ -37,26 +37,25 @@ void		displayMap(int *map)
     }
 }
 
-int		checkAround(t_struct *core, t_player player, int nbEnem, int range)
+int		checkAround(t_struct *core, t_player player, int nbEnem, int inRange)
 {
   int		i;
   int		x;
   int		y;
 
-  y = player.y - range - 1;
-  while (++y < range * 2 + 1)
+  y = player.y - inRange - 1;
+  while (++y <= player.y + inRange)
     {
-      x = player.x - range - 1;
-      while (++x < range * 2 + 1)
+      x = player.x - inRange - 1;
+      while (++x <= player.x + inRange)
 	{
 	  i = y * 50 + x;
-	  if (core->addr->map[i] && core->addr->map[i] != EMPTY &&
-	      core->addr->map[i] != player.team
-	      && y != player.y && x != player.x)
+	  if (i < 2500 && core->addr->map[i] != EMPTY &&
+	      core->addr->map[i] != player.team)
 	    nbEnem++;
 	}
     }
-  return (nbEnem > 2 ? - 1 : 0);
+  return (nbEnem > 1 ? 0 : 1);
 }
 
 void  semOperation(t_struct *core, int op)
@@ -66,10 +65,7 @@ void  semOperation(t_struct *core, int op)
   sops.sem_num = 0;
   sops.sem_flg = 0;
   sops.sem_op = op;
-  printf("qsdqsdqsdqsdqsdqsd %d\n", op);
-  printf("sembefore=%d\n", semctl(core->semId, 0, GETVAL));
   semop(core->semId, &sops, 1);
-  printf("semafter=%d\n", semctl(core->semId, 0, GETVAL));
 }
 
 void  i_die_msg(t_struct *core, t_player *player)
@@ -101,6 +97,8 @@ void  mainloop(t_struct *core, t_player *player)
     if (semctl(core->semId, 0, GETVAL) == player->id)
     {
       printf("ITS MY TURN BITCHES\n");
+      core->addr->map[5 * 50 + 38] = 7;
+      core->addr->map[4 * 50 + 37] = 7;
       if (!checkAround(core, *player, 0, 1))
       {
         i_die_msg(core, player);
@@ -126,7 +124,5 @@ int		main(int ac, char *av[])
   core.addr = NULL;
   if (initValues(&core, av[1], atoi(av[2])) == -1)
     return (-1);
-
-  printf("Key = %d\nShmId = %d\nAddr = %p\nmsgId = %d\n", core.key, core.shmId, core.addr->map, core.msgId);
   return (0);
 }
