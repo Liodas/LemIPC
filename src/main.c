@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Tue Mar 28 17:12:24 2017 gastal_r
+** Last update	Tue Mar 28 21:35:32 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -74,10 +74,9 @@ void  i_die_msg(t_struct *core, t_player *player)
 
   bzero(&msg, sizeof(t_msg));
   msg.mtype = player->id + 1;
-  sprintf(msg.str, "Decremente %d", player->id);
+  sprintf(msg.str, "%d Died", player->id);
   msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
   printf("message sended\n");
-  semOperation(core, -1);
   core->addr->players--;
 }
 
@@ -91,24 +90,29 @@ void  mainloop(t_struct *core, t_player *player)
     bzero(&msg, sizeof(t_msg));
     msgrcv(core->msgId, &msg, sizeof(t_msg), player->id, IPC_NOWAIT);
     printf("playerid=%d %s\n",player->id, msg.str);
-    if (strlen(msg.str) > 0)
-      player->id--;
     printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
+    if (strlen(msg.str) > 0)
+    {
+      bzero(&msg, sizeof(t_msg));
+      msg.mtype = player->id + 1;
+      sprintf(msg.str, "Decremente next %d", player->id + 1);
+      msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
+      player->id--;
+    }
     if (semctl(core->semId, 0, GETVAL) == player->id)
     {
       printf("ITS MY TURN BITCHES\n");
-      core->addr->map[5 * 50 + 38] = 7;
-      core->addr->map[4 * 50 + 37] = 7;
       if (!checkAround(core, *player, 0, 1))
       {
         i_die_msg(core, player);
         return;
-      };
-      if (semctl(core->semId, 0, GETVAL) == core->addr->players)
+      }
+      if (player->id != 1 && semctl(core->semId, 0, GETVAL) == core->addr->players)
       {
         semOperation(core, -core->addr->players + 1);
-
       }
+      else if (player->id == 1 && core->addr->players == 1)
+        exit(0);
       else
         semOperation(core, 1);
     }

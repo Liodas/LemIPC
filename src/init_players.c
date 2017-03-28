@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Tue Mar 28 17:06:44 2017 gastal_r
+** Last update	Tue Mar 28 21:15:25 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -60,7 +60,8 @@ int		initFirstPlayer(t_struct *core, int go_on, int idTeam)
           i_die_msg(core, &player);
           go_on = 0;
         }
-      semOperation(core, 1);
+      else
+        semOperation(core, 1);
     }
   }
   while (1) // check team on map
