@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Wed Mar 29 14:06:30 2017 gastal_r
+** Last update	Wed Mar 29 15:32:41 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -31,7 +31,7 @@ void		displayMap(int *map)
       while (++y < 50)
 	{
 	  i = y * 50 + x;
-	  map[i] != 0 ? printf("%d ", map[i]) : printf(" ");
+    map[i] != 0 ? printf("%d ", map[i]) : printf(" ");
 	}
       printf("\n");
     }
@@ -54,11 +54,41 @@ int		countEnemies(t_struct *core, t_player pos, int inRange)
       while (++x <= pos.x + inRange)
 	     {
 	        i = y * 50 + x;
+          //printf("%d", core->addr->map[i]);
 	        if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
-	           core->addr->map[i] == pos.team)
+	          core->addr->map[i] == pos.team)
             nbEnem++;
         }
+      printf("\n");
     }
+  return (nbEnem);
+}
+
+int       getEnemyPosition(t_struct *core, t_player player, t_player *pos, int inRange)
+{
+  int		i;
+  int		x;
+  int		y;
+  int nbEnem;
+
+  nbEnem = 0;
+  y = player.y - inRange - 1;
+  while (++y <= player.y + inRange)
+  {
+    x = player.x - inRange - 1;
+    while (++x <= player.x + inRange)
+     {
+        i = y * 50 + x;
+        if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
+           core->addr->map[i] != player.team)
+        {
+          (pos != NULL ? pos->x = i % 50 : 0);
+          (pos != NULL ? pos->y = i / 50 : 0);
+          (pos != NULL ? pos->team = core->addr->map[i] : 0);
+           nbEnem++;
+        }
+      }
+  }
   return (nbEnem);
 }
 
@@ -68,9 +98,9 @@ int       findClosestEnemy(t_struct *core, t_player *player, t_player *pos)
   int     i;
 
   i = 0;
-  while (checkAround(core, *player, pos, i) == 0 && i < 50)
+  while (getEnemyPosition(core, *player, pos, i) == 0 && i < 50)
     i++;
-  printf("ENEMY RANGE%d posx=%d  posy=%d\n", i, pos->x, pos->y);
+  printf("ENEMY RANGE%d posx=%d  posy=%d team=%d\n", i, pos->x, pos->y, pos->team);
 
   nb = countEnemies(core, *pos, 5);
   printf("enemy=%d\n", nb);
@@ -105,35 +135,41 @@ int		checkAroundAllies(t_struct *core, t_player player, int inRange)
 	            allies++;
 	      }
     }
-  return (allies > 1 ? 0 : allies);
+  return (allies);
+}
+
+void  tryMove(t_struct *core, t_player *player, t_player pos)
+{
+  int dir;
+  
+  dir = rand() % 2;
+  core->addr->map[player->y * 50 + player->x] = 0;
+  if (pos.x > player->x && pos.y == player->y)
+    (core->addr->map[player->y * 50 + player->x + 1] == 0 ? player->x++ : 0);
+  else if (pos.y > player->y && pos.x == player->x)
+    (core->addr->map[(player->y + 1) * 50 + player->x] == 0 ? player->y++ : 0);
+  else if (pos.x < player->x && pos.y == player->y)
+    (core->addr->map[player->y * 50 + player->x - 1] == 0 ? player->x-- : 0);
+  else if (pos.y < player->y && pos.x == player->x)
+    (core->addr->map[(player->y - 1)* 50 + player->x] == 0 ? player->y-- : 0);
+  else if (pos.x > player->x && pos.y > player->y)
+    (dir == 0 ? player->x++ : player->y++);
+  else if (pos.x < player->x && pos.y > player->y)
+    (dir == 0 ? player->x-- : player->y++);
+  else if (pos.x > player->x && pos.y < player->y)
+    (dir == 0 ? player->x++ : player->y--);
+  else if (pos.x < player->x && pos.y < player->y)
+    (dir == 0 ? player->x-- : player->y--);
+  core->addr->map[player->y * 50 + player->x] = player->team;
 }
 
 void  move(t_struct *core, t_player *player)
 {
   t_player pos;
-  int dir;
 
   if (findClosestEnemy(core, player, &pos) <= checkAroundAllies(core, *player, 5))
     {
-      dir = rand() % 2;
-      core->addr->map[player->y * 50 + player->x] = 0;
-      if (pos.x > player->x && pos.y == player->y)
-        player->x++;
-      else if (pos.y > player->y && pos.x == player->x)
-        player->y++;
-      else if (pos.x < player->x && pos.y == player->y)
-        player->x--;
-      else if (pos.y < player->y && pos.x == player->x)
-        player->y--;
-      else if (pos.x > player->x && pos.y > player->y)
-        (dir == 0 ? player->x++ : player->y++);
-      else if (pos.x < player->x && pos.y > player->y)
-        (dir == 0 ? player->x-- : player->y++);
-      else if (pos.x > player->x && pos.y < player->y)
-        (dir == 0 ? player->x++ : player->y--);
-      else if (pos.x < player->x && pos.y < player->y)
-        (dir == 0 ? player->x-- : player->y--);
-      core->addr->map[player->y * 50 + player->x] = player->id;
+      tryMove(core, player, pos);
       printf("MOVE %d %d\n", pos.x, pos.y);
       // TODO go to x y
     }
@@ -144,14 +180,15 @@ void  move(t_struct *core, t_player *player)
   }
 }
 
-int		checkAround(t_struct *core, t_player player, t_player *pos, int inRange)
+int		checkAround(t_struct *core, t_player player, int inRange)
 {
   int		i;
   int		x;
   int		y;
-  int nbEnem;
+  t_player tmp;
 
-  nbEnem = 0;
+  tmp.x = player.x;
+  tmp.y = player.y;
   y = player.y - inRange - 1;
   while (++y <= player.y + inRange)
     {
@@ -159,17 +196,16 @@ int		checkAround(t_struct *core, t_player player, t_player *pos, int inRange)
       while (++x <= player.x + inRange)
 	     {
 	        i = y * 50 + x;
-          //printf("tamere%d %d %d\n", i, y, x);
 	        if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
 	           core->addr->map[i] != player.team)
           {
-              (pos != NULL ? pos->x = i / 50 : 0);
-              (pos != NULL ? pos->y = i % 50 : 0);
-	            nbEnem++;
+             tmp.team = core->addr->map[i];
+             if (checkAroundAllies(core, tmp, 1) >= 2)
+              return (2);
           }
 	      }
     }
-  return (nbEnem > 1 ? 0 : nbEnem);
+    return (0);
 }
 
 void  semOperation(t_struct *core, int op)
@@ -216,7 +252,7 @@ void  mainloop(t_struct *core, t_player *player)
     if (semctl(core->semId, 0, GETVAL) == player->id)
     {
       printf("ITS MY TURN BITCHES\n");
-      if (checkAround(core, *player, 0, 1) != 0)
+      if (checkAround(core, *player, 1) > 1)
       {
         i_die_msg(core, player);
         return;
