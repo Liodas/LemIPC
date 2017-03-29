@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Tue Mar 28 21:15:25 2017 gastal_r
+** Last update	Wed Mar 29 11:11:59 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -55,7 +55,7 @@ int		initFirstPlayer(t_struct *core, int go_on, int idTeam)
     {
       displayMap(core->addr->map);
       printf("ITS MY TURN BITCHES\n");
-      if (!checkAround(core, player, 0, 1))
+      if (checkAround(core, player, 0, 1) != 0)
         {
           i_die_msg(core, &player);
           go_on = 0;

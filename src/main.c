@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Tue Mar 28 21:35:32 2017 gastal_r
+** Last update	Wed Mar 29 11:25:47 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -37,6 +37,51 @@ void		displayMap(int *map)
     }
 }
 
+int       findClosestEnemy(t_struct *core, t_player *player, t_player *closest)
+{
+  int     nb;
+  int   x;
+  int   y;
+  int   i;
+
+  i = 0;
+  while (checkAround(core, *player, 0, i) == 0 && i < 50)
+  {
+    printf("ENEMY RANGE%d\n", i);
+    i++;
+  }
+  t_player tmp;
+
+  (void) core;
+  (void) player;
+  (void) closest;
+  nb = 0;
+  return (nb);
+}
+
+int     findClosestAllies(t_struct *core, t_player *player, t_player *closest)
+{
+  (void) core;
+  (void) player;
+  (void) closest;
+  return (0);
+}
+
+void  move(t_struct *core, t_player *player)
+{
+  t_player closest;
+
+  if (findClosestEnemy(core, player, &closest) <= checkAround(core, *player, 0, 5))
+    {
+      // TODO go to x y
+    }
+  else
+  {
+    findClosestAllies(core, player, &closest);
+    // TODO go to x y
+  }
+}
+
 int		checkAround(t_struct *core, t_player player, int nbEnem, int inRange)
 {
   int		i;
@@ -48,14 +93,14 @@ int		checkAround(t_struct *core, t_player player, int nbEnem, int inRange)
     {
       x = player.x - inRange - 1;
       while (++x <= player.x + inRange)
-	{
-	  i = y * 50 + x;
-	  if (i < 2500 && core->addr->map[i] != EMPTY &&
-	      core->addr->map[i] != player.team)
-	    nbEnem++;
-	}
+	     {
+	        i = y * 50 + x;
+	        if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
+	           core->addr->map[i] != player.team)
+	            nbEnem++;
+	      }
     }
-  return (nbEnem > 1 ? 0 : 1);
+  return (nbEnem > 1 ? 0 : nbEnem);
 }
 
 void  semOperation(t_struct *core, int op)
@@ -102,11 +147,13 @@ void  mainloop(t_struct *core, t_player *player)
     if (semctl(core->semId, 0, GETVAL) == player->id)
     {
       printf("ITS MY TURN BITCHES\n");
-      if (!checkAround(core, *player, 0, 1))
+      if (checkAround(core, *player, 0, 1) != 0)
       {
         i_die_msg(core, player);
         return;
       }
+      else
+        move(core, player);
       if (player->id != 1 && semctl(core->semId, 0, GETVAL) == core->addr->players)
       {
         semOperation(core, -core->addr->players + 1);
