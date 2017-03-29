@@ -29,40 +29,44 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
   core->addr->players += 1;
 }
 
+void		mainloopFirstPlayer(t_struct *core, t_player *player, int *go_on)
+{
+  usleep(50000);
+  /* printf("players= %d  teams=%d\n", core->addr->players, core->addr->teams); */
+  /* printf("sem=%d\n", semctl(core->semId, 0, GETVAL)); */
+  if (semctl(core->semId, 0, GETVAL) == 1)
+    {
+      displayMap(core->addr->map);
+      //printf("ITS MY TURN BITCHES\n");
+      if (checkAround(core, *player, 1) > 1)
+        {
+          i_die_msg(core, player);
+          *go_on = 0;
+        }
+      else
+	{
+	  semOperation(core, 1);
+	  (core->addr->players > 1 ? move(core, player) : 0);
+	}
+    }
+}
+
 int		initFirstPlayer(t_struct *core, int go_on, int idTeam)
 {
   t_player	player;
 
-  printf("shmid %d\n", core->shmId);
-  if ((core->addr = (t_shared *) shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1)
+  /* printf("shmid %d\n", core->shmId); */
+  if ((core->addr = (t_shared *) shmat(core->shmId, NULL,
+				       SHM_R | SHM_W)) == (void *)-1)
     return (fprintf(stderr, "Shmat failed\n") - 14);
-  printf("%p\n", core->addr);
+  /* printf("%p\n", core->addr); */
   initMap(core);
   initNewPlayer(core, &player, idTeam);
   displayMap(core->addr->map);
   core->addr->players = 1;
   core->addr->teams = 1;
   while (go_on)
-  {
-    usleep(50000);
-    printf("players= %d  teams=%d\n", core->addr->players, core->addr->teams);
-    printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
-    if (semctl(core->semId, 0, GETVAL) == 1)
-    {
-      displayMap(core->addr->map);
-      //printf("ITS MY TURN BITCHES\n");
-      if (checkAround(core, player, 1) > 1)
-        {
-          i_die_msg(core, &player);
-          go_on = 0;
-        }
-      else
-      {
-        semOperation(core, 1);
-        (core->addr->players > 1 ? move(core, &player) : 0);
-      }
-    }
-  }
+    mainloopFirstPlayer(core, &player, &go_on);
   while (1) // check team on map
   {
     usleep(50000);
@@ -75,11 +79,11 @@ return (0);
 
 int		initOtherPlayers(t_struct *core)
 {
-  printf("%p\n", core->addr);
-  printf("shmid %d\n", core->shmId);
+  /* printf("%p\n", core->addr); */
+  /* printf("shmid %d\n", core->shmId); */
   if ((core->addr = (t_shared *) shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1)
     return (fprintf(stderr, "Shmat failed\n") - 14);
-  printf("%p\n", core->addr);
+  /* printf("%p\n", core->addr); */
   displayMap(core->addr->map);
   return (0);
 }

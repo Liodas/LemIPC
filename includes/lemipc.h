@@ -20,6 +20,7 @@
 # include   <string.h>
 # include   <stdlib.h>
 # include   <unistd.h>
+# include   <time.h>
 
 # define    EMPTY 0
 
@@ -55,7 +56,7 @@ typedef struct			s_struct
 
 void	initNewPlayer(t_struct *, t_player *, int);
 int	initFirstPlayer(t_struct *, int, int);
-int	initValues(t_struct *, char *, int);
+int	initValues(t_struct *, char *, int, int);
 int	initOtherPlayers(t_struct *);
 void	mainloop(t_struct *, t_player *);
 int	initMsg(t_struct *);
@@ -63,8 +64,17 @@ int	initSem(t_struct *);
 void	initMap(t_struct *);
 void	displayMap(int *);
 int	printUsage();
-int		checkAround(t_struct *, t_player, int);
-void  semOperation(t_struct *, int );
-void  i_die_msg(t_struct *, t_player *);
+int	checkAround(t_struct *, t_player, int);
+void	semOperation(t_struct *, int );
+void	i_die_msg(t_struct *, t_player *);
+int	tryMoveLeft(t_struct *, t_player *, int);
+int	tryMoveRight(t_struct *, t_player *, int);
+int	tryMoveUp(t_struct *, t_player *, int);
+int	tryMoveDown(t_struct *, t_player *, int);
+int	findClosestAllies(t_struct *, t_player *, t_player *);
+int	checkAroundAllies(t_struct *, t_player, int);
+int	countEnemies(t_struct *, t_player, int);
+int	getEnemyPosition(t_struct *, t_player, t_player *, int);
+int	findClosestEnemy(t_struct *, t_player *, t_player *);
 
 #endif

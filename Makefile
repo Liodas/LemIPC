@@ -20,7 +20,10 @@ NAME		=	lemipc
 
 SRCS		=	src/main.c		\
 			src/init.c		\
-			src/init_players.c
+			src/allies.c		\
+			src/enemies.c		\
+			src/init_players.c	\
+			src/tryMoveDirections.c
 
 OBJS		=	$(SRCS:.c=.o)
 
