@@ -19,13 +19,11 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
   player->x = rand() % (50 - 1);
   player->y = rand() % (50 - 1);
   i = player->y * 50 + player->x;
-  printf("I ++++++++ %d\n", i);
   while (core->addr->map[i] != EMPTY)
     {
       player->x = rand() % (50 - 1);
       player->y = rand() % (50 - 1);
       i = player->y * 50 + player->x;
-      printf("I ++++++++ %d\n", i);
     }
   core->addr->map[i] = idTeam;
   core->addr->players += 1;
@@ -46,9 +44,9 @@ int		initFirstPlayer(t_struct *core, int go_on, int idTeam)
   core->addr->teams = 1;
   while (go_on)
   {
-    sleep(1);
-    printf("players= %d  teams=%d\n", core->addr->players, core->addr->teams);
-    printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
+    usleep(10000);
+    /* printf("players= %d  teams=%d\n", core->addr->players, core->addr->teams); */
+    /* printf("sem=%d\n", semctl(core->semId, 0, GETVAL)); */
     if (semctl(core->semId, 0, GETVAL) == 1)
     {
       displayMap(core->addr->map);
@@ -67,7 +65,7 @@ int		initFirstPlayer(t_struct *core, int go_on, int idTeam)
   }
   while (1) // check team on map
   {
-    sleep(1);
+    usleep(10000);
     printf("players= %d  teams=%d\n", core->addr->players, core->addr->teams);
     printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
     displayMap(core->addr->map);

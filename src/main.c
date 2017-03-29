@@ -145,13 +145,17 @@ void  tryMove(t_struct *core, t_player *player, t_player pos)
   dir = rand() % 2;
   core->addr->map[player->y * 50 + player->x] = 0;
   if (pos.x > player->x && pos.y == player->y)
-    (core->addr->map[player->y * 50 + player->x + 1] == 0 ? player->x++ : 0);
+    (core->addr->map[player->y * 50 + player->x + 1] == 0 ? player->x++ :
+     core->addr->map[player->y * 50 + player->x + 1] != 0 && dir == 0 ? player->y++ : player->y--);
   else if (pos.y > player->y && pos.x == player->x)
-    (core->addr->map[(player->y + 1) * 50 + player->x] == 0 ? player->y++ : 0);
+    (core->addr->map[(player->y + 1) * 50 + player->x] == 0 ? player->y++ :
+     core->addr->map[(player->y + 1) * 50 + player->x] != 0 && dir == 0 ? player->x++ : player->x--);
   else if (pos.x < player->x && pos.y == player->y)
-    (core->addr->map[player->y * 50 + player->x - 1] == 0 ? player->x-- : 0);
+    (core->addr->map[player->y * 50 + player->x - 1] == 0 ? player->x-- :
+     core->addr->map[player->y * 50 + player->x - 1] != 0 && dir == 0 ? player->y++ : player->y--);
   else if (pos.y < player->y && pos.x == player->x)
-    (core->addr->map[(player->y - 1)* 50 + player->x] == 0 ? player->y-- : 0);
+    (core->addr->map[(player->y - 1) * 50 + player->x] == 0 ? player->y-- :
+     core->addr->map[(player->y - 1) * 50 + player->x] != 0 && dir == 0 ? player->x++ : player->x--);
   else if (pos.x > player->x && pos.y > player->y)
     (dir == 0 ? player->x++ : player->y++);
   else if (pos.x < player->x && pos.y > player->y)
@@ -228,6 +232,7 @@ void  i_die_msg(t_struct *core, t_player *player)
   msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
   printf("message sended\n");
   core->addr->players--;
+  core->addr->map[player->y * 50 + player->x] = 0;
 }
 
 void  mainloop(t_struct *core, t_player *player)
@@ -236,11 +241,11 @@ void  mainloop(t_struct *core, t_player *player)
 
   while (1)
   {
-    sleep(1);
+    usleep(10000);
     bzero(&msg, sizeof(t_msg));
     msgrcv(core->msgId, &msg, sizeof(t_msg), player->id, IPC_NOWAIT);
-    printf("playerid=%d %s\n",player->id, msg.str);
-    printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
+    /* printf("playerid=%d %s\n",player->id, msg.str); */
+    /* printf("sem=%d\n", semctl(core->semId, 0, GETVAL)); */
     if (strlen(msg.str) > 0)
     {
       bzero(&msg, sizeof(t_msg));
