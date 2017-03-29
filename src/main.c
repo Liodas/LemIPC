@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Wed Mar 29 15:32:41 2017 gastal_r
+** Last update	Wed Mar 29 17:07:44 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -96,14 +96,17 @@ int       findClosestEnemy(t_struct *core, t_player *player, t_player *pos)
 {
   int     nb;
   int     i;
+  int     rt;
 
   i = 0;
-  while (getEnemyPosition(core, *player, pos, i) == 0 && i < 50)
+  while ((rt = getEnemyPosition(core, *player, pos, i)) == 0 && i < 50)
     i++;
-  printf("ENEMY RANGE%d posx=%d  posy=%d team=%d\n", i, pos->x, pos->y, pos->team);
+  if (rt == 0)
+    return (0);
+  //printf("ENEMY RANGE%d posx=%d  posy=%d team=%d\n", i, pos->x, pos->y, pos->team);
 
   nb = countEnemies(core, *pos, 5);
-  printf("enemy=%d\n", nb);
+  //printf("enemy=%d\n", nb);
   return (nb);
 }
 
@@ -141,7 +144,7 @@ int		checkAroundAllies(t_struct *core, t_player player, int inRange)
 void  tryMove(t_struct *core, t_player *player, t_player pos)
 {
   int dir;
-  
+
   dir = rand() % 2;
   core->addr->map[player->y * 50 + player->x] = 0;
   if (pos.x > player->x && pos.y == player->y)
@@ -170,14 +173,18 @@ void  tryMove(t_struct *core, t_player *player, t_player pos)
 void  move(t_struct *core, t_player *player)
 {
   t_player pos;
+  int enemies;
+  int allies;
 
-  if (findClosestEnemy(core, player, &pos) <= checkAroundAllies(core, *player, 5))
+  enemies = findClosestEnemy(core, player, &pos);
+  allies = checkAroundAllies(core, *player, 5);
+  if (enemies != 0 && enemies <= allies)
     {
       tryMove(core, player, pos);
-      printf("MOVE %d %d\n", pos.x, pos.y);
+      //printf("MOVE %d %d\n", pos.x, pos.y);
       // TODO go to x y
     }
-  else
+  else if (allies > 0)
   {
     findClosestAllies(core, player, &pos);
     // TODO go to x y
@@ -231,6 +238,9 @@ void  i_die_msg(t_struct *core, t_player *player)
   sprintf(msg.str, "%d Died", player->id);
   msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
   printf("message sended\n");
+  printf("qsdqsdqsd %d %d\n", player->id ,core->addr->players);
+  if (player->id == core->addr->players)
+    semOperation(core, -(player->id) + 1);
   core->addr->players--;
   core->addr->map[player->y * 50 + player->x] = 0;
 }
@@ -241,7 +251,7 @@ void  mainloop(t_struct *core, t_player *player)
 
   while (1)
   {
-    usleep(10000);
+    usleep(50000);
     bzero(&msg, sizeof(t_msg));
     msgrcv(core->msgId, &msg, sizeof(t_msg), player->id, IPC_NOWAIT);
     /* printf("playerid=%d %s\n",player->id, msg.str); */
