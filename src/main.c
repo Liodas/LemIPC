@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Wed Mar 29 11:25:47 2017 gastal_r
+** Last update	Wed Mar 29 14:06:30 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -37,57 +37,62 @@ void		displayMap(int *map)
     }
 }
 
-int       findClosestEnemy(t_struct *core, t_player *player, t_player *closest)
-{
-  int     nb;
-  int   x;
-  int   y;
-  int   i;
+//int
 
-  i = 0;
-  while (checkAround(core, *player, 0, i) == 0 && i < 50)
-  {
-    printf("ENEMY RANGE%d\n", i);
-    i++;
-  }
-  t_player tmp;
-
-  (void) core;
-  (void) player;
-  (void) closest;
-  nb = 0;
-  return (nb);
-}
-
-int     findClosestAllies(t_struct *core, t_player *player, t_player *closest)
-{
-  (void) core;
-  (void) player;
-  (void) closest;
-  return (0);
-}
-
-void  move(t_struct *core, t_player *player)
-{
-  t_player closest;
-
-  if (findClosestEnemy(core, player, &closest) <= checkAround(core, *player, 0, 5))
-    {
-      // TODO go to x y
-    }
-  else
-  {
-    findClosestAllies(core, player, &closest);
-    // TODO go to x y
-  }
-}
-
-int		checkAround(t_struct *core, t_player player, int nbEnem, int inRange)
+int		countEnemies(t_struct *core, t_player pos, int inRange)
 {
   int		i;
   int		x;
   int		y;
+  int   nbEnem;
 
+  nbEnem = 0;
+  y = pos.y - inRange - 1;
+  while (++y <= pos.y + inRange)
+    {
+      x = pos.x - inRange - 1;
+      while (++x <= pos.x + inRange)
+	     {
+	        i = y * 50 + x;
+	        if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
+	           core->addr->map[i] == pos.team)
+            nbEnem++;
+        }
+    }
+  return (nbEnem);
+}
+
+int       findClosestEnemy(t_struct *core, t_player *player, t_player *pos)
+{
+  int     nb;
+  int     i;
+
+  i = 0;
+  while (checkAround(core, *player, pos, i) == 0 && i < 50)
+    i++;
+  printf("ENEMY RANGE%d posx=%d  posy=%d\n", i, pos->x, pos->y);
+
+  nb = countEnemies(core, *pos, 5);
+  printf("enemy=%d\n", nb);
+  return (nb);
+}
+
+int     findClosestAllies(t_struct *core, t_player *player, t_player *pos)
+{
+  (void) core;
+  (void) player;
+  (void) pos;
+  return (0);
+}
+
+int		checkAroundAllies(t_struct *core, t_player player, int inRange)
+{
+  int		i;
+  int		x;
+  int		y;
+  int allies;
+
+  allies = 0;
   y = player.y - inRange - 1;
   while (++y <= player.y + inRange)
     {
@@ -96,8 +101,72 @@ int		checkAround(t_struct *core, t_player player, int nbEnem, int inRange)
 	     {
 	        i = y * 50 + x;
 	        if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
+	           core->addr->map[i] == player.team)
+	            allies++;
+	      }
+    }
+  return (allies > 1 ? 0 : allies);
+}
+
+void  move(t_struct *core, t_player *player)
+{
+  t_player pos;
+  int dir;
+
+  if (findClosestEnemy(core, player, &pos) <= checkAroundAllies(core, *player, 5))
+    {
+      dir = rand() % 2;
+      core->addr->map[player->y * 50 + player->x] = 0;
+      if (pos.x > player->x && pos.y == player->y)
+        player->x++;
+      else if (pos.y > player->y && pos.x == player->x)
+        player->y++;
+      else if (pos.x < player->x && pos.y == player->y)
+        player->x--;
+      else if (pos.y < player->y && pos.x == player->x)
+        player->y--;
+      else if (pos.x > player->x && pos.y > player->y)
+        (dir == 0 ? player->x++ : player->y++);
+      else if (pos.x < player->x && pos.y > player->y)
+        (dir == 0 ? player->x-- : player->y++);
+      else if (pos.x > player->x && pos.y < player->y)
+        (dir == 0 ? player->x++ : player->y--);
+      else if (pos.x < player->x && pos.y < player->y)
+        (dir == 0 ? player->x-- : player->y--);
+      core->addr->map[player->y * 50 + player->x] = player->id;
+      printf("MOVE %d %d\n", pos.x, pos.y);
+      // TODO go to x y
+    }
+  else
+  {
+    findClosestAllies(core, player, &pos);
+    // TODO go to x y
+  }
+}
+
+int		checkAround(t_struct *core, t_player player, t_player *pos, int inRange)
+{
+  int		i;
+  int		x;
+  int		y;
+  int nbEnem;
+
+  nbEnem = 0;
+  y = player.y - inRange - 1;
+  while (++y <= player.y + inRange)
+    {
+      x = player.x - inRange - 1;
+      while (++x <= player.x + inRange)
+	     {
+	        i = y * 50 + x;
+          //printf("tamere%d %d %d\n", i, y, x);
+	        if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
 	           core->addr->map[i] != player.team)
+          {
+              (pos != NULL ? pos->x = i / 50 : 0);
+              (pos != NULL ? pos->y = i % 50 : 0);
 	            nbEnem++;
+          }
 	      }
     }
   return (nbEnem > 1 ? 0 : nbEnem);
