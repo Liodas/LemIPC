@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Thu Mar 30 14:31:42 2017 gastal_r
+** Last update	Thu Mar 30 15:12:46 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -163,7 +163,6 @@ void  i_die_msg(t_struct *core, t_player *player)
   //printf("tant pis je meurs %d %d\n", player->id ,core->addr->players);
   if (player->id == core->addr->players)
     semOperation(core, -(player->id) + 1);
-  core->addr->players--;
   core->addr->map[player->y * 50 + player->x] = 0;
 }
 
@@ -176,14 +175,22 @@ void  mainloop(t_struct *core, t_player *player)
       usleep(50000);
       bzero(&msg, sizeof(t_msg));
       msgrcv(core->msgId, &msg, sizeof(t_msg), player->id, IPC_NOWAIT);
-      //printf("playerid=%d %s\n",player->id, msg.str);
-      //printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
-      if (strlen(msg.str) > 0 && core->addr->players != player->id)
+      printf("playerid=%d %s\n",player->id, msg.str);
+      printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
+      if (strlen(msg.str) > 0)
 	    {
-	      bzero(&msg, sizeof(t_msg));
-	      msg.mtype = player->id + 1;
-	      sprintf(msg.str, "Decremente next %d", player->id + 1);
-	      msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
+        if (core->addr->players != player->id)
+        {
+	        bzero(&msg, sizeof(t_msg));
+	        msg.mtype = player->id + 1;
+	        sprintf(msg.str, "Decremente next %d", player->id + 1);
+	        msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
+        }
+        else
+        {
+          core->addr->players--;
+          semOperation(core, -1);
+        }
 	      player->id--;
 	    }
       if (semctl(core->semId, 0, GETVAL) == player->id)
