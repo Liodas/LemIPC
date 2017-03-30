@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Thu Mar 30 17:10:24 2017 gastal_r
+** Last update	Thu Mar 30 17:33:51 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -107,9 +107,8 @@ void  move(t_struct *core, t_player *player)
     }
   else
     {
-      findClosestAllies(core, player, &pos);
-      tryMove(core, player, pos);
-      // TODO go to x y
+      if (findClosestAllies(core, player, &pos) > 0)
+        tryMove(core, player, pos);
     }
 }
 

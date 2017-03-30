@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Wed Mar 29 16:53:49 2017 gastal_r
+** Last update	Thu Mar 30 17:39:33 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -33,11 +33,11 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
 void		mainloopFirstPlayer(t_struct *core, t_player *player, int *go_on)
 {
   usleep(50000);
-  /* printf("players= %d  teams=%d\n", core->addr->players, core->addr->teams); */
-  /* printf("sem=%d\n", semctl(core->semId, 0, GETVAL)); */
+  //printf("players= %d  teams=%d\n", core->addr->players, core->addr->teams);
+  //printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
+  displayMap(core->addr->map);
   if (semctl(core->semId, 0, GETVAL) == 1)
     {
-      displayMap(core->addr->map);
       //printf("ITS MY TURN BITCHES\n");
       if (checkAround(core, *player, 1) > 1)
         {
@@ -47,14 +47,14 @@ void		mainloopFirstPlayer(t_struct *core, t_player *player, int *go_on)
       else
 	{
 	  semOperation(core, 1);
-	  (core->addr->players > 1 ? move(core, player) : 0);
+	  (core->addr->players > 1 ? move(core, player) : (void)0);
 	}
     }
 }
 
 void		freeIPCS(t_struct *core)
 {
-  
+
 }
 
 int		initFirstPlayer(t_struct *core, int go_on, int idTeam)

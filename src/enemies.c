@@ -1,11 +1,11 @@
 /*
 ** enemies.c for Project-Master in /home/sellet_f/Projets/Tek2/PSU_2016_lemipc
-** 
+**
 ** Made by sellet_f
 ** Login   <flavien.sellet@epitech.eu>
-** 
+**
 ** Started on  Thu Mar 30 01:33:01 2017 sellet_f
-** Last update Thu Mar 30 01:36:03 2017 chalie_a
+** Last update	Thu Mar 30 17:37:08 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -79,7 +79,7 @@ int       findClosestEnemy(t_struct *core, t_player *player,
     return (0);
   //printf("ENEMY RANGE%d posx=%d  posy=%d team=%d\n", i, pos->x, pos->y, pos->team);
 
-  nb = countEnemies(core, *pos, 5);
+  nb = countEnemies(core, *pos, 3);
   //printf("enemy=%d\n", nb);
   return (nb);
 }
