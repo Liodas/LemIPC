@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:30:19 2017 gastal_r
-** Last update	Wed Mar 29 15:15:54 2017 gastal_r
+** Last update	Thu Mar 30 18:40:04 2017 gastal_r
 */
 
 #ifndef     __LEMIPC_H__
@@ -55,8 +55,8 @@ typedef struct			s_struct
 }				t_struct;
 
 void	initNewPlayer(t_struct *, t_player *, int);
-int	initFirstPlayer(t_struct *, int, int);
-int	initValues(t_struct *, char *, int, int);
+int	initFirstPlayer(t_struct *, int);
+int	initValues(t_struct *, char *, int);
 int	initOtherPlayers(t_struct *);
 void	mainloop(t_struct *, t_player *);
 int	initMsg(t_struct *);

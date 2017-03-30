@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Thu Mar 30 01:33:49 2017 sellet_f
-** Last update	Thu Mar 30 17:36:53 2017 gastal_r
+** Last update	Thu Mar 30 18:32:42 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -15,9 +15,9 @@ int		countAllies(t_struct *core, t_player pos, int inRange)
   int		i;
   int		x;
   int		y;
-  int   nbEnem;
+  int   nbAllies;
 
-  nbEnem = 0;
+  nbAllies = 0;
   y = pos.y - inRange - 1;
   while (++y <= pos.y + inRange)
     {
@@ -28,11 +28,11 @@ int		countAllies(t_struct *core, t_player pos, int inRange)
           //printf("%d", core->addr->map[i]);
 	  if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
 	      core->addr->map[i] == pos.team)
-            nbEnem++;
+            nbAllies++;
         }
       /* printf("\n"); */
     }
-  return (nbEnem);
+  return (nbAllies);
 }
 
 int       getAlliesPosition(t_struct *core, t_player player,
@@ -41,9 +41,7 @@ int       getAlliesPosition(t_struct *core, t_player player,
   int		i;
   int		x;
   int		y;
-  int nbEnem;
 
-  nbEnem = 0;
   y = player.y - inRange - 1;
   while (++y <= player.y + inRange)
     {
@@ -59,11 +57,11 @@ int       getAlliesPosition(t_struct *core, t_player player,
 	      (pos != NULL ? pos->x = i % 50 : 0);
 	      (pos != NULL ? pos->y = i / 50 : 0);
 	      (pos != NULL ? pos->team = core->addr->map[i] : 0);
-	      nbEnem++;
+	      return (1);
 	    }
 	}
     }
-  return (nbEnem);
+  return (0);
 }
 
 int     findClosestAllies(t_struct *core, t_player *player, t_player *pos)

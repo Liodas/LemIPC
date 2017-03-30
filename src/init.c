@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:02:38 2017 sellet_f
-** Last update	Tue Mar 28 16:28:17 2017 gastal_r
+** Last update	Thu Mar 30 19:28:37 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -49,9 +49,8 @@ int		initMsg(t_struct *core)
   return (0);
 }
 
-int		initValues(t_struct *core, char *path, int idTeam, int go_on)
+int		initValues(t_struct *core, char *path, int idTeam)
 {
-  t_msg		msg;
   t_player	player;
 
   if ((core->key = ftok(path, 0)) == -1)
@@ -59,13 +58,12 @@ int		initValues(t_struct *core, char *path, int idTeam, int go_on)
   initMsg(core);
   if (initSem(core) == -1)
     return (-1);
-  /* printf("msgid %d\n", core->msgId); */
   if ((core->shmId = shmget(core->key, sizeof(t_shared) * 50 * 50,
 			    SHM_R | SHM_W)) == -1)
     {
       if ((core->shmId = shmget(core->key, sizeof(t_shared) * 50 * 50,
 				IPC_CREAT | SHM_R | SHM_W)) != -1)
-	if (initFirstPlayer(core, go_on, idTeam) == -1)
+	if (initFirstPlayer(core, idTeam) == -1)
 	  return (-1);
     }
   else

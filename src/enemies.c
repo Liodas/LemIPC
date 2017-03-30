@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Thu Mar 30 01:33:01 2017 sellet_f
-** Last update	Thu Mar 30 17:37:08 2017 gastal_r
+** Last update	Thu Mar 30 18:32:35 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -41,9 +41,7 @@ int       getEnemyPosition(t_struct *core, t_player player,
   int		i;
   int		x;
   int		y;
-  int nbEnem;
 
-  nbEnem = 0;
   y = player.y - inRange - 1;
   while (++y <= player.y + inRange)
     {
@@ -58,11 +56,11 @@ int       getEnemyPosition(t_struct *core, t_player player,
 	      (pos != NULL ? pos->x = i % 50 : 0);
 	      (pos != NULL ? pos->y = i / 50 : 0);
 	      (pos != NULL ? pos->team = core->addr->map[i] : 0);
-	      nbEnem++;
+	      return (1);
 	    }
 	}
     }
-  return (nbEnem);
+  return (0);
 }
 
 int       findClosestEnemy(t_struct *core, t_player *player,

@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Thu Mar 30 17:33:51 2017 gastal_r
+** Last update	Thu Mar 30 18:57:04 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -100,10 +100,9 @@ void  move(t_struct *core, t_player *player)
 
   enemies = findClosestEnemy(core, player, &pos);
   allies = checkAroundAllies(core, *player, 5);
-  if (enemies != 0 && enemies <= allies)
+  if (enemies != 0 && enemies <= allies && allies > 1)
     {
       tryMove(core, player, pos);
-      //printf("MOVE %d %d\n", pos.x, pos.y);
     }
   else
     {
@@ -165,7 +164,6 @@ void  i_die_msg(t_struct *core, t_player *player)
   if (player->id == core->addr->players)
   {
     semOperation(core, -(player->id) + 1);
-    printf("VALUEUUUUUUU %d\n", -(player->id) + 1);
     core->addr->players--;
   }
   core->addr->map[player->y * 50 + player->x] = 0;
@@ -177,11 +175,11 @@ void  mainloop(t_struct *core, t_player *player)
 
   while (1)
     {
-      usleep(50000);
+      //usleep(50000);
       bzero(&msg, sizeof(t_msg));
       msgrcv(core->msgId, &msg, sizeof(t_msg), player->id, IPC_NOWAIT);
-      printf("playerid=%d %s\n",player->id, msg.str);
-      printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
+      //printf("playerid=%d %s\n",player->id, msg.str);
+      //printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
       if (strlen(msg.str) > 0)
 	    {
         if (core->addr->players != player->id)
@@ -226,7 +224,7 @@ int		main(int ac, char *av[])
     return (printUsage());
   core.addr = NULL;
   srand(time(NULL));
-  if (initValues(&core, av[1], atoi(av[2]), 1) == -1)
+  if (initValues(&core, av[1], atoi(av[2])) == -1)
     return (-1);
   return (0);
 }
