@@ -52,6 +52,11 @@ void		mainloopFirstPlayer(t_struct *core, t_player *player, int *go_on)
     }
 }
 
+void		freeIPCS(t_struct *core)
+{
+  
+}
+
 int		initFirstPlayer(t_struct *core, int go_on, int idTeam)
 {
   t_player	player;
@@ -75,6 +80,7 @@ int		initFirstPlayer(t_struct *core, int go_on, int idTeam)
     //printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
     displayMap(core->addr->map);
   }
+  freeIPCS(core);
 return (0);
 }
 
