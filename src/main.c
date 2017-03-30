@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Wed Mar 29 17:07:44 2017 gastal_r
+** Last update	Thu Mar 30 14:31:42 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -149,7 +149,7 @@ void  i_die_msg(t_struct *core, t_player *player)
   sprintf(msg.str, "%d Died", player->id);
   msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
   /* printf("message sended\n"); */
-  /* printf("qsdqsdqsd %d %d\n", player->id ,core->addr->players); */
+  //printf("tant pis je meurs %d %d\n", player->id ,core->addr->players);
   if (player->id == core->addr->players)
     semOperation(core, -(player->id) + 1);
   core->addr->players--;
@@ -165,33 +165,33 @@ void  mainloop(t_struct *core, t_player *player)
       usleep(50000);
       bzero(&msg, sizeof(t_msg));
       msgrcv(core->msgId, &msg, sizeof(t_msg), player->id, IPC_NOWAIT);
-      /* printf("playerid=%d %s\n",player->id, msg.str); */
-      /* printf("sem=%d\n", semctl(core->semId, 0, GETVAL)); */
-      if (strlen(msg.str) > 0)
-	{
-	  bzero(&msg, sizeof(t_msg));
-	  msg.mtype = player->id + 1;
-	  sprintf(msg.str, "Decremente next %d", player->id + 1);
-	  msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
-	  player->id--;
-	}
-      if (semctl(core->semId, 0, GETVAL) == player->id)
-	{
-	  /* printf("ITS MY TURN BITCHES\n"); */
-	  if (checkAround(core, *player, 1) > 1)
+      //printf("playerid=%d %s\n",player->id, msg.str);
+      //printf("sem=%d\n", semctl(core->semId, 0, GETVAL));
+      if (strlen(msg.str) > 0 && core->addr->players != player->id)
 	    {
-	      i_die_msg(core, player);
-	      return;
+	      bzero(&msg, sizeof(t_msg));
+	      msg.mtype = player->id + 1;
+	      sprintf(msg.str, "Decremente next %d", player->id + 1);
+	      msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
+	      player->id--;
 	    }
-	  else
-	    move(core, player);
-	  if (player->id != 1 && semctl(core->semId, 0, GETVAL) == core->addr->players)
-	    semOperation(core, -core->addr->players + 1);
-	  else if (player->id == 1 && core->addr->players == 1)
-	    exit(0);
-	  else
-	    semOperation(core, 1);
-	}
+      if (semctl(core->semId, 0, GETVAL) == player->id)
+	    {
+	      /* printf("ITS MY TURN BITCHES\n"); */
+	      if (checkAround(core, *player, 1) > 1)
+	      {
+	        i_die_msg(core, player);
+	        return;
+	      }
+	      else
+	       move(core, player);
+	      if (player->id != 1 && semctl(core->semId, 0, GETVAL) == core->addr->players)
+	       semOperation(core, -core->addr->players + 1);
+	      else if (player->id == 1 && core->addr->players == 1)
+	       exit(0);
+	      else
+	       semOperation(core, 1);
+	    }
     }
 }
 
