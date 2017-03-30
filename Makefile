@@ -9,7 +9,7 @@
 ##
 
 
-CC		=       gcc -g -g3
+CC		=       gcc
 
 RM		=       rm -rf
 
@@ -23,6 +23,9 @@ SRCS		=	src/main.c		\
 			src/allies.c		\
 			src/enemies.c		\
 			src/init_players.c	\
+			src/player_loop.c	\
+			src/move.c		\
+			src/aff_func.c		\
 			src/tryMoveDirections.c
 
 OBJS		=	$(SRCS:.c=.o)

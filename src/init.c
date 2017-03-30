@@ -72,7 +72,7 @@ int		initValues(t_struct *core, char *path, int idTeam)
       if (initOtherPlayers(core) == -1)
 	return (-1);
       initNewPlayer(core, &player, idTeam);
-      mainloop(core, &player);
+      playerLoop(core, &player);
     }
   return (0);
 }
