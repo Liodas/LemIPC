@@ -76,5 +76,7 @@ int	checkAroundAllies(t_struct *, t_player, int);
 int	countEnemies(t_struct *, t_player, int);
 int	getEnemyPosition(t_struct *, t_player, t_player *, int);
 int	findClosestEnemy(t_struct *, t_player *, t_player *);
+void	checkNewTeam(t_struct *, int);
+void	move(t_struct *, t_player *);
 
 #endif

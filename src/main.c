@@ -18,6 +18,17 @@ assigned to the current player\n");
   return (-1);
 }
 
+void		checkNewTeam(t_struct *core, int idTeam)
+{
+  int		i;
+
+  i = -1;
+  while (++i < 2500)
+    if (core->addr->map[i] == idTeam)
+      return ;
+  core->addr->teams += 1;
+}
+
 void		displayMap(int *map)
 {
   int		x;

@@ -27,6 +27,7 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
     }
   core->addr->map[i] = idTeam;
   core->addr->players += 1;
+  checkNewTeam(core, idTeam);
 }
 
 void		mainloopFirstPlayer(t_struct *core, t_player *player, int *go_on)
