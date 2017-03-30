@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Thu Mar 30 15:12:46 2017 gastal_r
+** Last update	Thu Mar 30 16:52:23 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -155,14 +155,20 @@ void  i_die_msg(t_struct *core, t_player *player)
 {
   t_msg msg;
 
-  bzero(&msg, sizeof(t_msg));
-  msg.mtype = player->id + 1;
-  sprintf(msg.str, "%d Died", player->id);
-  msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
-  /* printf("message sended\n"); */
   //printf("tant pis je meurs %d %d\n", player->id ,core->addr->players);
+  if (player->id != core->addr->players)
+  {
+    bzero(&msg, sizeof(t_msg));
+    msg.mtype = player->id + 1;
+    sprintf(msg.str, "%d Died", player->id);
+    msgsnd(core->msgId, &msg, sizeof(t_msg), 0);
+  }
   if (player->id == core->addr->players)
+  {
     semOperation(core, -(player->id) + 1);
+    printf("VALUEUUUUUUU %d\n", -(player->id) + 1);
+    core->addr->players--;
+  }
   core->addr->map[player->y * 50 + player->x] = 0;
 }
 
