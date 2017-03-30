@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Thu Mar 30 01:33:49 2017 sellet_f
-** Last update	Thu Mar 30 18:32:42 2017 gastal_r
+** Last update	Thu Mar 30 21:57:57 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -25,12 +25,10 @@ int		countAllies(t_struct *core, t_player pos, int inRange)
       while (++x <= pos.x + inRange)
 	{
 	  i = y * 50 + x;
-          //printf("%d", core->addr->map[i]);
 	  if (y >= 0 && x >= 0 && i < 2500 && core->addr->map[i] != EMPTY &&
 	      core->addr->map[i] == pos.team)
             nbAllies++;
         }
-      /* printf("\n"); */
     }
   return (nbAllies);
 }
@@ -75,10 +73,7 @@ int     findClosestAllies(t_struct *core, t_player *player, t_player *pos)
     i++;
   if (rt == 0)
     return (0);
-  //printf("ALLIES RANGE%d posx=%d  posy=%d team=%d\n", i, pos->x, pos->y, pos->team);
-
   nb = countAllies(core, *pos, 3);
-  //printf("allies=%d\n", nb);
   return (nb);
 }
 

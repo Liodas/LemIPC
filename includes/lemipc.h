@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:30:19 2017 gastal_r
-** Last update	Thu Mar 30 18:40:04 2017 gastal_r
+** Last update	Thu Mar 30 22:35:54 2017 gastal_r
 */
 
 #ifndef     __LEMIPC_H__
@@ -67,10 +67,10 @@ int	printUsage();
 int	checkAround(t_struct *, t_player, int);
 void	semOperation(t_struct *, int );
 void	i_die_msg(t_struct *, t_player *);
-int	tryMoveLeft(t_struct *, t_player *, int);
-int	tryMoveRight(t_struct *, t_player *, int);
-int	tryMoveUp(t_struct *, t_player *, int);
-int	tryMoveDown(t_struct *, t_player *, int);
+void	tryMoveLeft(t_struct *, t_player *, int);
+void	tryMoveRight(t_struct *, t_player *, int);
+void	tryMoveUp(t_struct *, t_player *, int);
+void	tryMoveDown(t_struct *, t_player *, int);
 int	findClosestAllies(t_struct *, t_player *, t_player *);
 int	checkAroundAllies(t_struct *, t_player, int);
 int	countEnemies(t_struct *, t_player, int);

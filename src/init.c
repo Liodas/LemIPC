@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:02:38 2017 sellet_f
-** Last update	Thu Mar 30 19:28:37 2017 gastal_r
+** Last update	Thu Mar 30 22:17:54 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -32,7 +32,8 @@ int		initSem(t_struct *core)
 {
   if ((core->semId = semget(core->key, 1, SHM_R | SHM_W)) == -1)
     {
-      if ((core->semId = semget(core->key, 1, IPC_CREAT | SHM_R | SHM_W)) == -1)
+      if ((core->semId = semget(core->key, 1, IPC_CREAT | SHM_R | SHM_W))
+          == -1)
 	return (fprintf(stderr, "Semget failed\n") - 15);
       semctl(core->semId, 0, SETVAL, 1);
     }

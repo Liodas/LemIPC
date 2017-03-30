@@ -9,8 +9,9 @@ then
 else
     while [ $i -gt 0 ]
     do
-	echo $i
+	#	echo $i
         ./lemipc `pwd` $((RANDOM % 9 + 1)) &
 	((i-=1))
     done
+    
 fi

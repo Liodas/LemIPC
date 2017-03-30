@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Thu Mar 30 19:42:48 2017 gastal_r
+** Last update	Thu Mar 30 22:16:51 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -30,10 +30,23 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
   checkNewTeam(core, idTeam);
 }
 
+void    timeDislayMap(t_struct *core)
+{
+  static clock_t t1 = -10000;
+  clock_t t2;
+
+  t2 = clock();
+  if (t2 - t1 >= 10000)
+  {
+    system("clear");
+    //printf("\033[2J\033[1;1H");
+    displayMap(core->addr->map);
+    t1 = clock();
+  }
+}
+
 void		mainloopFirstPlayer(t_struct *core, t_player *player)
 {
-  clock_t t1 = clock();
-  clock_t t2;
   int go_on;
 
   go_on = 1;
@@ -49,18 +62,10 @@ void		mainloopFirstPlayer(t_struct *core, t_player *player)
       else
 	    {
 	      semOperation(core, 1);
-	      (core->addr->players > 1 ? move(core, player) : (void)0);
+	      move(core, player);
 	    }
-  //displayMap(core->addr->map);
     }
-    t2 = clock();
-    if (t2 - t1 >= 10000)
-    {
-      //system("clear");
-      printf("\033[2J\033[1;1H");
-      displayMap(core->addr->map);
-      t1 = clock();
-    }
+    timeDislayMap(core);
   }
 }
 
@@ -71,41 +76,26 @@ void		freeIPCS(t_struct *core)
 
 int		initFirstPlayer(t_struct *core, int idTeam)
 {
-  t_player	player;
-  clock_t t1 = clock();
-  clock_t t2;
+  t_player player;
 
-  /* printf("shmid %d\n", core->shmId); */
   if ((core->addr = (t_shared *) shmat(core->shmId, NULL,
 				       SHM_R | SHM_W)) == (void *)-1)
     return (fprintf(stderr, "Shmat failed\n") - 14);
-  /* printf("%p\n", core->addr); */
   initMap(core);
   initNewPlayer(core, &player, idTeam);
   core->addr->players = 1;
   core->addr->teams = 1;
   mainloopFirstPlayer(core, &player);
-  while (1) // check team on map
-  {
-    t2 = clock();
-    if (t2 - t1 >= 10000)
-    {
-      //system("clear");
-      printf("\033[2J\033[1;1H");
-      displayMap(core->addr->map);
-      t1 = clock();
-    }
-  }
+  while (1)
+    timeDislayMap(core);
   freeIPCS(core);
 return (0);
 }
 
 int		initOtherPlayers(t_struct *core)
 {
-  /* printf("%p\n", core->addr); */
-  /* printf("shmid %d\n", core->shmId); */
-  if ((core->addr = (t_shared *) shmat(core->shmId, NULL, SHM_R | SHM_W)) == (void *)-1)
+  if ((core->addr = (t_shared *) shmat(core->shmId, NULL, SHM_R | SHM_W))
+      == (void *)-1)
     return (fprintf(stderr, "Shmat failed\n") - 14);
-  /* printf("%p\n", core->addr); */
   return (0);
 }
