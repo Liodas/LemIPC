@@ -25,19 +25,15 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
       player->y = rand() % (50 - 1);
       i = player->y * 50 + player->x;
     }
+  if (checkNewTeam(core, idTeam) == 1)
+    core->addr->teams += 1;
   core->addr->map[i] = idTeam;
   core->addr->players += 1;
-  checkNewTeam(core, idTeam);
-}
-
-void		freeIPCS(t_struct *core)
-{
-
 }
 
 int		initFirstPlayer(t_struct *core, int idTeam)
 {
-  t_player player;
+  t_player	player;
 
   if ((core->addr = (t_shared *) shmat(core->shmId, NULL,
 				       SHM_R | SHM_W)) == (void *)-1)
@@ -50,7 +46,7 @@ int		initFirstPlayer(t_struct *core, int idTeam)
   while (1)
     timeDislayMap(core);
   freeIPCS(core);
-return (0);
+  return (0);
 }
 
 int		initOtherPlayers(t_struct *core)

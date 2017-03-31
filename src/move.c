@@ -10,12 +10,12 @@
 
 #include      "lemipc.h"
 
-int		checkAround(t_struct *core, t_player player, int inRange)
+int             checkAround(t_struct *core, t_player player, int inRange)
 {
   int		i;
   int		x;
   int		y;
-  t_player tmp;
+  t_player	tmp;
 
   tmp.x = player.x;
   tmp.y = player.y;
@@ -38,7 +38,8 @@ int		checkAround(t_struct *core, t_player player, int inRange)
   return (0);
 }
 
-void	tryMoveDiagonale(t_struct *core, t_player *player, t_player pos, int dir)
+void	tryMoveDiagonale(t_struct *core, t_player *player,
+			 t_player pos, int dir)
 {
   if (pos.x < player->x && pos.y < player->y)
     {
@@ -62,9 +63,9 @@ void	tryMoveDiagonale(t_struct *core, t_player *player, t_player pos, int dir)
     }
 }
 
-void  tryMove(t_struct *core, t_player *player, t_player pos)
+void	tryMove(t_struct *core, t_player *player, t_player pos)
 {
-  int dir;
+  int	dir;
 
   dir = rand() % 2;
   core->addr->map[player->y * 50 + player->x] = 0;
@@ -81,21 +82,16 @@ void  tryMove(t_struct *core, t_player *player, t_player pos)
   core->addr->map[player->y * 50 + player->x] = player->team;
 }
 
-void  move(t_struct *core, t_player *player)
+void		move(t_struct *core, t_player *player)
 {
-  t_player pos;
-  int enemies;
-  int allies;
+  t_player	pos;
+  int		enemies;
+  int		allies;
 
   enemies = findClosestEnemy(core, player, &pos);
   allies = checkAroundAllies(core, *player, 3);
   if (enemies != 0 && enemies <= allies && allies > 1)
-    {
-      tryMove(core, player, pos);
-    }
-  else
-    {
-      if (findClosestAllies(core, player, &pos) > 0)
-        tryMove(core, player, pos);
-    }
+    tryMove(core, player, pos);
+  else if (findClosestAllies(core, player, &pos) > 0)
+    tryMove(core, player, pos);
 }

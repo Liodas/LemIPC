@@ -15,7 +15,7 @@ int		countEnemies(t_struct *core, t_player pos, int inRange)
   int		i;
   int		x;
   int		y;
-  int   nbEnem;
+  int		nbEnem;
 
   nbEnem = 0;
   y = pos.y - inRange - 1;
@@ -33,8 +33,8 @@ int		countEnemies(t_struct *core, t_player pos, int inRange)
   return (nbEnem);
 }
 
-int       getEnemyPosition(t_struct *core, t_player player,
-			   t_player *pos, int inRange)
+int		getEnemyPosition(t_struct *core, t_player player,
+				 t_player *pos, int inRange)
 {
   int		i;
   int		x;

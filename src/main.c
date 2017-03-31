@@ -10,20 +10,29 @@
 
 #include      "lemipc.h"
 
-void		checkNewTeam(t_struct *core, int idTeam)
+
+void		freeIPCS(t_struct *core)
+{
+  shmctl(core->key, IPC_RMID, NULL);
+  semctl(core->key, 1, IPC_RMID);
+  msgctl(core->key, IPC_RMID, NULL);
+}
+
+
+int		checkNewTeam(t_struct *core, int idTeam)
 {
   int		i;
 
   i = -1;
   while (++i < 2500)
     if (core->addr->map[i] == idTeam)
-      return ;
-  core->addr->teams += 1;
+      return (0);
+  return (1);
 }
 
-void  semOperation(t_struct *core, int op)
+void		semOperation(t_struct *core, int op)
 {
-  struct sembuf sops;
+  struct sembuf	sops;
 
   sops.sem_num = 0;
   sops.sem_flg = 0;

@@ -26,7 +26,7 @@ void		displayMap(int *map)
 
   x = -1;
   while (++x < 50)
-   printf("-");
+    printf("-");
   printf("-\n");
   x = -1;
   while (++x < 50)
@@ -40,23 +40,24 @@ void		displayMap(int *map)
 	}
       printf("|\n");
     }
-   x = -1;
-   while (++x < 50)
-     printf("-");
-   printf("-\n");
+  x = -1;
+  while (++x < 50)
+    printf("-");
+  printf("-\n");
 }
 
-void    timeDislayMap(t_struct *core)
+void			timeDislayMap(t_struct *core)
 {
-  static clock_t t1 = -10000;
-  clock_t t2;
+  static clock_t	t1 = -10000;
+  clock_t		t2;
 
   t2 = clock();
   if (t2 - t1 >= 10000)
-  {
-    system("clear");
-    //printf("\033[2J\033[1;1H");
-    displayMap(core->addr->map);
-    t1 = clock();
-  }
+    {
+      system("clear");
+      //printf("\033[2J\033[1;1H");
+      displayMap(core->addr->map);
+      printf("teams = %d\n", core->addr->teams);
+      t1 = clock();
+    }
 }

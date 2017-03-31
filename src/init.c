@@ -10,7 +10,7 @@
 
 #include "lemipc.h"
 
-void    initMap(t_struct *core)
+void		initMap(t_struct *core)
 {
   int		x;
   int		y;
@@ -43,10 +43,8 @@ int		initSem(t_struct *core)
 int		initMsg(t_struct *core)
 {
   if ((core->msgId = msgget(core->key, SHM_R | SHM_W)) == -1)
-    {
-      if ((core->msgId = msgget(core->key, IPC_CREAT | SHM_R | SHM_W)) == -1)
-	return (fprintf(stderr, "Msgget failed\n") - 15);
-    }
+    if ((core->msgId = msgget(core->key, IPC_CREAT | SHM_R | SHM_W)) == -1)
+      return (fprintf(stderr, "Msgget failed\n") - 15);
   return (0);
 }
 
