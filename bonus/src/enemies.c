@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Thu Mar 30 01:33:01 2017 sellet_f
-** Last update	Fri Mar 31 00:44:23 2017 gastal_r
+** Last update	Fri Mar 31 11:18:12 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -73,6 +73,6 @@ int       findClosestEnemy(t_struct *core, t_player *player,
     i++;
   if (rt == 0)
     return (0);
-  nb = countEnemies(core, *pos, 3);
+  nb = countEnemies(core, *pos, 5);
   return (nb);
 }

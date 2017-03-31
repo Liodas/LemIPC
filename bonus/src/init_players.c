@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Fri Mar 31 02:16:38 2017 gastal_r
+** Last update	Fri Mar 31 15:30:13 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -19,20 +19,17 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
   player->x = rand() % (MAP_SIZE - 1);
   player->y = rand() % (MAP_SIZE - 1);
   i = player->y * MAP_SIZE + player->x;
-  while (core->addr->map[i] != EMPTY)
+  while (core->addr->map[i] && core->addr->map[i] != EMPTY)
     {
       player->x = rand() % (MAP_SIZE - 1);
       player->y = rand() % (MAP_SIZE - 1);
       i = player->y * MAP_SIZE + player->x;
     }
+  if (checkNewTeam(core, idTeam) == 1)
+    core->addr->teams += 1;
   core->addr->map[i] = idTeam;
   core->addr->players += 1;
   checkNewTeam(core, idTeam);
-}
-
-void		freeIPCS(t_struct *core)
-{
-
 }
 
 int		initFirstPlayer(t_struct *core, int idTeam)
@@ -52,12 +49,15 @@ int		initFirstPlayer(t_struct *core, int idTeam)
   sleep(1);
   graph.rect = sfRectangleShape_create();
   firstPlayerLoop(core, &player, &graph);
-  while (1)
-    timeDislayMap(core, &graph);
+  while (sfRenderWindow_isOpen(graph.win))
+   {
+      checkPressedKey(&graph);
+      timeDislayMap(core, &graph);
+    }
   freeIPCS(core);
- sfRenderWindow_destroy(graph.win);
- sfRectangleShape_destroy(graph.rect);
- return (0);
+  sfRenderWindow_destroy(graph.win);
+  sfRectangleShape_destroy(graph.rect);
+  return (0);
 }
 
 int		initOtherPlayers(t_struct *core)

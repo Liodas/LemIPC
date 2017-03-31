@@ -5,19 +5,24 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Thu Mar 30 23:04:45 2017 gastal_r
+** Last update	Fri Mar 31 16:34:47 2017 gastal_r
 */
 
 #include      "lemipc.h"
 
-
 void		freeIPCS(t_struct *core)
 {
-  shmctl(core->key, IPC_RMID, NULL);
-  semctl(core->key, 1, IPC_RMID);
-  msgctl(core->key, IPC_RMID, NULL);
-}
+  char *str;
 
+  str = (char *) calloc(10, 1);
+  sprintf(str, "ipcrm -m %d", core->shmId);
+  system(str);
+  sprintf(str, "ipcrm -s %d", core->semId);
+  system(str);
+  sprintf(str, "ipcrm -q %d", core->msgId);
+  system(str);
+  free(str);
+}
 
 int		checkNewTeam(t_struct *core, int idTeam)
 {

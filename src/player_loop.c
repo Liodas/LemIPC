@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 22:55:09 2017 gastal_r
-** Last update	Fri Mar 31 02:20:46 2017 gastal_r
+** Last update	Fri Mar 31 14:48:28 2017 gastal_r
 */
 
 #include    "lemipc.h"
@@ -26,7 +26,7 @@ void	i_die_msg(t_struct *core, t_player *player)
       semOperation(core, -(player->id) + 1);
       core->addr->players--;
     }
-  
+
   core->addr->map[player->y * 50 + player->x] = 0;
 }
 
@@ -56,7 +56,7 @@ void	checkMessage(t_struct *core, t_player *player)
 
 void  playerLoop(t_struct *core, t_player *player)
 {
-  while (1)
+  while (core->addr->teams > 1)
     {
       usleep(1000);
       checkMessage(core, player);
@@ -66,6 +66,7 @@ void  playerLoop(t_struct *core, t_player *player)
 	  if (checkAround(core, *player, 1) > 1)
 	    {
 	      i_die_msg(core, player);
+        (checkNewTeam(core, player->team) == 1 ? core->addr->teams-- : 0);
 	      return;
 	    }
 	  else
@@ -94,6 +95,7 @@ void		firstPlayerLoop(t_struct *core, t_player *player)
 	  if (checkAround(core, *player, 1) > 1)
 	    {
 	      i_die_msg(core, player);
+        (checkNewTeam(core, player->team) == 1 ? core->addr->teams-- : 0);
 	      go_on = 0;
 	    }
 	  else

@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Thu Mar 30 23:05:22 2017 gastal_r
+** Last update	Fri Mar 31 15:27:56 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -19,7 +19,7 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
   player->x = rand() % (50 - 1);
   player->y = rand() % (50 - 1);
   i = player->y * 50 + player->x;
-  while (core->addr->map[i] != EMPTY)
+  while (core->addr->map[i] && core->addr->map[i] != EMPTY)
     {
       player->x = rand() % (50 - 1);
       player->y = rand() % (50 - 1);
@@ -43,8 +43,10 @@ int		initFirstPlayer(t_struct *core, int idTeam)
   core->addr->players = 1;
   core->addr->teams = 1;
   firstPlayerLoop(core, &player);
-  while (1)
+  while (core->addr->teams > 1)
     timeDislayMap(core);
+  system("clear");
+  displayMap(core->addr->map);
   freeIPCS(core);
   return (0);
 }

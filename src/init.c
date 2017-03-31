@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:02:38 2017 sellet_f
-** Last update	Thu Mar 30 22:17:54 2017 gastal_r
+** Last update	Fri Mar 31 15:29:43 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -57,11 +57,11 @@ int		initValues(t_struct *core, char *path, int idTeam)
   initMsg(core);
   if (initSem(core) == -1)
     return (-1);
-  if ((core->shmId = shmget(core->key, sizeof(t_shared) * 50 * 50,
-			    SHM_R | SHM_W)) == -1)
+  if ((core->shmId = shmget(core->key, sizeof(t_shared)
+      + 50 * 50 * sizeof(int), SHM_R | SHM_W)) == -1)
     {
-      if ((core->shmId = shmget(core->key, sizeof(t_shared) * 50 * 50,
-				IPC_CREAT | SHM_R | SHM_W)) != -1)
+      if ((core->shmId = shmget(core->key, sizeof(t_shared)
+      + 50 * 50 * sizeof(int), IPC_CREAT | SHM_R | SHM_W)) != -1)
 	if (initFirstPlayer(core, idTeam) == -1)
 	  return (-1);
     }

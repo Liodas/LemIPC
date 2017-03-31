@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Thu Mar 30 01:33:49 2017 sellet_f
-** Last update	Fri Mar 31 00:44:12 2017 gastal_r
+** Last update	Fri Mar 31 12:50:08 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -73,7 +73,7 @@ int     findClosestAllies(t_struct *core, t_player *player, t_player *pos)
     i++;
   if (rt == 0)
     return (0);
-  nb = countAllies(core, *pos, 3);
+  nb = countAllies(core, *pos, 5);
   return (nb);
 }
 

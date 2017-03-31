@@ -5,13 +5,15 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:02:38 2017 sellet_f
-** Last update	Fri Mar 31 01:21:23 2017 gastal_r
+** Last update	Fri Mar 31 15:29:04 2017 gastal_r
 */
 
 #include "lemipc.h"
 
 void    initMap(t_struct *core)
 {
+  bzero(core->addr->map, MAP_SIZE * MAP_SIZE);
+  return;
   int		x;
   int		y;
   int		i;
@@ -59,11 +61,12 @@ int		initValues(t_struct *core, char *path, int idTeam)
   initMsg(core);
   if (initSem(core) == -1)
     return (-1);
-  if ((core->shmId = shmget(core->key, sizeof(t_shared) * MAP_SIZE * MAP_SIZE,
-			    SHM_R | SHM_W)) == -1)
+  if ((core->shmId = shmget(core->key, sizeof(t_shared)
+      + MAP_SIZE * MAP_SIZE * sizeof(int), SHM_R | SHM_W)) == -1)
     {
-      if ((core->shmId = shmget(core->key, sizeof(t_shared) * MAP_SIZE * MAP_SIZE,
-				IPC_CREAT | SHM_R | SHM_W)) != -1)
+      if ((core->shmId = shmget(core->key, sizeof(t_shared)
+          + MAP_SIZE * MAP_SIZE * sizeof(int),
+          IPC_CREAT | SHM_R | SHM_W)) != -1)
 	if (initFirstPlayer(core, idTeam) == -1)
 	  return (-1);
     }

@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 23:04:16 2017 gastal_r
-** Last update	Fri Mar 31 02:28:59 2017 gastal_r
+** Last update	Fri Mar 31 15:06:59 2017 gastal_r
 */
 
 #include    "lemipc.h"
@@ -55,7 +55,7 @@ void		displayMap(int *map, t_graph *graph)
 
   sfRenderWindow_clear(graph->win, sfBlack);
   x = -1;
-  while (++x < MAP_SIZE)
+  while (++x < MAP_SIZE + 1)
     drawSquare(x, 0, graph, 10);
   x = -1;
   while (++x < MAP_SIZE)
@@ -67,7 +67,7 @@ void		displayMap(int *map, t_graph *graph)
 	  i = y * MAP_SIZE + x;
 	  map[i] != 0 ? drawSquare(x + 1, y + 1, graph, map[i]) : (void)0;
 	}
-    drawSquare(y, x, graph, 10);
+    drawSquare(y, x + 1, graph, 10);
     }
    x = -1;
    while (++x <= MAP_SIZE)

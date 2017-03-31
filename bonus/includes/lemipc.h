@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:30:19 2017 gastal_r
-** Last update	Fri Mar 31 02:29:41 2017 gastal_r
+** Last update	Fri Mar 31 14:52:21 2017 gastal_r
 */
 
 #ifndef     __LEMIPC_H__
@@ -86,10 +86,12 @@ int	checkAroundAllies(t_struct *, t_player, int);
 int	countEnemies(t_struct *, t_player, int);
 int	getEnemyPosition(t_struct *, t_player, t_player *, int);
 int	findClosestEnemy(t_struct *, t_player *, t_player *);
-void	checkNewTeam(t_struct *, int);
+int	checkNewTeam(t_struct *, int);
 void	move(t_struct *, t_player *);
 void    timeDislayMap(t_struct *, t_graph *);
 void		firstPlayerLoop(t_struct *, t_player *, t_graph *);
 void  playerLoop(t_struct *, t_player *);
+int  checkPressedKey(t_graph *);
+void		freeIPCS(t_struct *);
 
 #endif
