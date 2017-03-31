@@ -13,7 +13,7 @@ else
         ./lemipc `pwd` $((RANDOM % 9 + 1)) &
 	((i-=1))
 
-	sleep 0.02
+	sleep 0.03
     done
     
 fi

@@ -5,7 +5,7 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Fri Mar 31 15:27:56 2017 gastal_r
+** Last update	Fri Mar 31 17:17:16 2017 gastal_r
 */
 
 #include "lemipc.h"
@@ -45,7 +45,7 @@ int		initFirstPlayer(t_struct *core, int idTeam)
   firstPlayerLoop(core, &player);
   while (core->addr->teams > 1)
     timeDislayMap(core);
-  system("clear");
+  printf("\033[2J\033[1;1H");
   displayMap(core->addr->map);
   freeIPCS(core);
   return (0);

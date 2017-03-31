@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Fri Mar 31 16:34:47 2017 gastal_r
+** Last update	Fri Mar 31 18:20:59 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -14,7 +14,7 @@ void		freeIPCS(t_struct *core)
 {
   char *str;
 
-  str = (char *) calloc(10, 1);
+  str = (char *) calloc(14, 1);
   sprintf(str, "ipcrm -m %d", core->shmId);
   system(str);
   sprintf(str, "ipcrm -s %d", core->semId);
