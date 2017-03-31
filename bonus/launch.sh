@@ -10,9 +10,8 @@ else
     while [ $i -gt 0 ]
     do
 	#	echo $i
-        ./lemipc `pwd` $((RANDOM % 9 + 1)) &
+        ./lemipc `pwd` $((RANDOM % 5 + 1)) &
 	((i-=1))
-
 	sleep 0.01
     done
     

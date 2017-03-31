@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 22:55:09 2017 gastal_r
-** Last update	Fri Mar 31 02:20:46 2017 gastal_r
+** Last update	Fri Mar 31 02:19:01 2017 gastal_r
 */
 
 #include    "lemipc.h"
@@ -14,7 +14,6 @@ void  i_die_msg(t_struct *core, t_player *player)
 {
   t_msg msg;
 
-  //printf("tant pis je meurs %d %d\n", player->id ,core->addr->players);
   if (player->id != core->addr->players)
   {
     bzero(&msg, sizeof(t_msg));
@@ -27,7 +26,7 @@ void  i_die_msg(t_struct *core, t_player *player)
     semOperation(core, -(player->id) + 1);
     core->addr->players--;
   }
-  core->addr->map[player->y * 50 + player->x] = 0;
+  core->addr->map[player->y * MAP_SIZE + player->x] = 0;
 }
 
 void   checkMessage(t_struct *core, t_player *player)
@@ -81,14 +80,14 @@ void  playerLoop(t_struct *core, t_player *player)
     }
 }
 
-void		firstPlayerLoop(t_struct *core, t_player *player)
+void		firstPlayerLoop(t_struct *core, t_player *player, t_graph *graph)
 {
   int go_on;
 
   go_on = 1;
   while (go_on)
   {
-    if (semctl(core->semId, 0, GETVAL) == 1)
+     if (semctl(core->semId, 0, GETVAL) == 1)
     {
       usleep(SPEED);
       if (checkAround(core, *player, 1) > 1)
@@ -102,6 +101,6 @@ void		firstPlayerLoop(t_struct *core, t_player *player)
 	      move(core, player);
 	    }
     }
-    timeDislayMap(core);
+    timeDislayMap(core, graph);
   }
 }
