@@ -12,7 +12,7 @@ else
 	#	echo $i
         ./lemipc `pwd` $((RANDOM % 5 + 1)) &
 	((i-=1))
-	sleep 0.01
+	sleep 0.02
     done
     
 fi

@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:30:19 2017 gastal_r
-** Last update	Fri Mar 31 02:09:43 2017 gastal_r
+** Last update	Fri Mar 31 02:29:41 2017 gastal_r
 */
 
 #ifndef     __LEMIPC_H__
@@ -25,7 +25,7 @@
 
 # define    EMPTY 0
 # define    VIDEO_MOD {800, 800, 32}
-# define    MAP_SIZE 300
+# define    MAP_SIZE 250
 # define    SPEED 5000
 
 typedef struct      s_graph

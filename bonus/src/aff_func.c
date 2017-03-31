@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 23:04:16 2017 gastal_r
-** Last update	Fri Mar 31 01:44:23 2017 gastal_r
+** Last update	Fri Mar 31 02:28:59 2017 gastal_r
 */
 
 #include    "lemipc.h"
@@ -37,10 +37,10 @@ void    drawSquare(int x, int y, t_graph *graph, int nb)
   sfVector2f pos;
   sfVector2f size;
 
-  pos.x = x * 2;
-  pos.y = y * 2;
-  size.x = 2;
-  size.y = 2;
+  pos.x = x * 3;
+  pos.y = y * 3;
+  size.x = 3;
+  size.y = 3;
   sfRectangleShape_setSize(graph->rect, size);
   setTeamColor(graph->rect, nb);
   sfRectangleShape_setPosition(graph->rect, pos);
