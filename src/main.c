@@ -12,7 +12,7 @@
 
 void		freeIPCS(t_struct *core)
 {
-  char *str;
+  char		*str;
 
   str = (char *) calloc(14, 1);
   sprintf(str, "ipcrm -m %d", core->shmId);

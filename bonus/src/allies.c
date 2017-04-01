@@ -15,7 +15,7 @@ int		countAllies(t_struct *core, t_player pos, int inRange)
   int		i;
   int		x;
   int		y;
-  int   nbAllies;
+  int		nbAllies;
 
   nbAllies = 0;
   y = pos.y - inRange - 1;
@@ -25,7 +25,8 @@ int		countAllies(t_struct *core, t_player pos, int inRange)
       while (++x <= pos.x + inRange)
 	{
 	  i = y * MAP_SIZE + x;
-	  if (y >= 0 && x >= 0 && i < MAP_SIZE * MAP_SIZE && core->addr->map[i] != EMPTY &&
+	  if (y >= 0 && x >= 0 && i < MAP_SIZE * MAP_SIZE &&
+	      core->addr->map[i] != EMPTY &&
 	      core->addr->map[i] == pos.team)
             nbAllies++;
         }
@@ -33,8 +34,8 @@ int		countAllies(t_struct *core, t_player pos, int inRange)
   return (nbAllies);
 }
 
-int       getAlliesPosition(t_struct *core, t_player player,
-			   t_player *pos, int inRange)
+int		getAlliesPosition(t_struct *core, t_player player,
+				  t_player *pos, int inRange)
 {
   int		i;
   int		x;
@@ -48,9 +49,9 @@ int       getAlliesPosition(t_struct *core, t_player player,
 	{
 	  i = y * MAP_SIZE + x;
 	  if (y >= 0 && x >= 0 && i < MAP_SIZE * MAP_SIZE
-      && core->addr->map[i] != EMPTY
-      && core->addr->map[i] == player.team
-      && i != player.y * MAP_SIZE + player.x)
+	      && core->addr->map[i] != EMPTY
+	      && core->addr->map[i] == player.team
+	      && i != player.y * MAP_SIZE + player.x)
 	    {
 	      (pos != NULL ? pos->x = i % MAP_SIZE : 0);
 	      (pos != NULL ? pos->y = i / MAP_SIZE : 0);
@@ -62,11 +63,12 @@ int       getAlliesPosition(t_struct *core, t_player player,
   return (0);
 }
 
-int     findClosestAllies(t_struct *core, t_player *player, t_player *pos)
+int		findClosestAllies(t_struct *core, t_player *player,
+				  t_player *pos)
 {
-  int     nb;
-  int     i;
-  int     rt;
+  int		nb;
+  int		i;
+  int		rt;
 
   i = 0;
   while ((rt = getAlliesPosition(core, *player, pos, i)) == 0 && i < MAP_SIZE)

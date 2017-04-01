@@ -26,17 +26,17 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
       i = player->y * MAP_SIZE + player->x;
     }
   if (checkNewTeam(core, idTeam) == 1)
-  {
-    core->addr->teams += 1;
-    (core->addr->checkTeams == 1 ? core->addr->checkTeams = 0 : 0);
-  }
+    {
+      core->addr->teams += 1;
+      (core->addr->checkTeams == 1 ? core->addr->checkTeams = 0 : 0);
+    }
   core->addr->map[i] = idTeam;
   core->addr->players += 1;
 }
 
-void  initGraph(t_graph *graph)
+void		initGraph(t_graph *graph)
 {
-  sfVideoMode mode = VIDEO_MOD;
+  sfVideoMode	mode = VIDEO_MOD;
   graph->win = sfRenderWindow_create(mode, "LemIPC", sfResize | sfClose, NULL);
   sleep(1);
   graph->rect = sfRectangleShape_create();
@@ -50,8 +50,8 @@ void  freeGraph(t_graph *graph)
 
 int		initFirstPlayer(t_struct *core, int idTeam)
 {
-  t_player player;
-  t_graph  graph;
+  t_player	player;
+  t_graph	graph;
 
   if ((core->addr = (t_shared *) shmat(core->shmId, NULL,
 				       SHM_R | SHM_W)) == (void *)-1)
@@ -64,7 +64,7 @@ int		initFirstPlayer(t_struct *core, int idTeam)
   initGraph(&graph);
   firstPlayerLoop(core, &player, &graph);
   while (sfRenderWindow_isOpen(graph.win))
-   {
+    {
       checkPressedKey(&graph);
       timeDislayMap(core, &graph);
     }

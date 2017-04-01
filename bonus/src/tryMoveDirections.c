@@ -20,26 +20,26 @@ int	checkNextMove(t_struct *core, int x, int y)
 void	tryMoveLeft(t_struct *core, t_player *player, int dir)
 {
   if (checkNextMove(core, player->x - 1, player->y) == 0)
-  {
-    if (dir == 0)
-      {
-	if (checkNextMove(core, player->x, player->y - 1) != 0)
-	  player->y--;
-	else if (checkNextMove(core, player->x, player->y + 1) != 0)
-	  player->y++;
-	else if (checkNextMove(core, player->x + 1, player->y) != 0)
-	  player->x++;
-      }
-    else
-      {
-	if (checkNextMove(core, player->x, player->y + 1) != 0)
-	  player->y++;
-	else if (checkNextMove(core, player->x, player->y - 1) != 0)
-	  player->y--;
-	else if (checkNextMove(core, player->x + 1, player->y) != 0)
-	  player->x++;
-      }
-  }
+    {
+      if (dir == 0)
+	{
+	  if (checkNextMove(core, player->x, player->y - 1) != 0)
+	    player->y--;
+	  else if (checkNextMove(core, player->x, player->y + 1) != 0)
+	    player->y++;
+	  else if (checkNextMove(core, player->x + 1, player->y) != 0)
+	    player->x++;
+	}
+      else
+	{
+	  if (checkNextMove(core, player->x, player->y + 1) != 0)
+	    player->y++;
+	  else if (checkNextMove(core, player->x, player->y - 1) != 0)
+	    player->y--;
+	  else if (checkNextMove(core, player->x + 1, player->y) != 0)
+	    player->x++;
+	}
+    }
   else
     player->x--;
 }
@@ -47,26 +47,26 @@ void	tryMoveLeft(t_struct *core, t_player *player, int dir)
 void	tryMoveRight(t_struct *core, t_player *player, int dir)
 {
   if (checkNextMove(core, player->x + 1, player->y) == 0)
-  {
-    if (dir == 0)
-      {
-	if (checkNextMove(core, player->x, player->y - 1) != 0)
-	  player->y--;
-	else if (checkNextMove(core, player->x, player->y + 1) != 0)
-	  player->y++;
-	else if (checkNextMove(core, player->x - 1, player->y) != 0)
-	  player->x--;
-      }
-    else
-      {
-	if (checkNextMove(core, player->x, player->y + 1) != 0)
-	  player->y++;
-	else if (checkNextMove(core, player->x, player->y - 1) != 0)
-	  player->y--;
-	else if (checkNextMove(core, player->x - 1, player->y) != 0)
-	  player->x--;
-      }
-   }
+    {
+      if (dir == 0)
+	{
+	  if (checkNextMove(core, player->x, player->y - 1) != 0)
+	    player->y--;
+	  else if (checkNextMove(core, player->x, player->y + 1) != 0)
+	    player->y++;
+	  else if (checkNextMove(core, player->x - 1, player->y) != 0)
+	    player->x--;
+	}
+      else
+	{
+	  if (checkNextMove(core, player->x, player->y + 1) != 0)
+	    player->y++;
+	  else if (checkNextMove(core, player->x, player->y - 1) != 0)
+	    player->y--;
+	  else if (checkNextMove(core, player->x - 1, player->y) != 0)
+	    player->x--;
+	}
+    }
   else
     player->x++;
 }
@@ -74,7 +74,7 @@ void	tryMoveRight(t_struct *core, t_player *player, int dir)
 void	tryMoveUp(t_struct *core, t_player *player, int dir)
 {
   if (checkNextMove(core, player->x, player->y + 1) == 0)
-  {
+    {
       if (dir == 0)
 	{
 	  if (checkNextMove(core, player->x - 1, player->y) != 0)
@@ -93,7 +93,7 @@ void	tryMoveUp(t_struct *core, t_player *player, int dir)
 	  else if (checkNextMove(core, player->x, player->y - 1) != 0)
 	    player->y--;
 	}
-  }
+    }
   else
     player->y++;
 }
@@ -101,26 +101,26 @@ void	tryMoveUp(t_struct *core, t_player *player, int dir)
 void	tryMoveDown(t_struct *core, t_player *player, int dir)
 {
   if (checkNextMove(core, player->x, player->y - 1) == 0)
-  {
-    if (dir == 0)
-      {
-	if (checkNextMove(core, player->x + 1, player->y) != 0)
-	  player->x++;
-	else if (checkNextMove(core, player->x - 1, player->y) != 0)
-	  player->x--;
-	else if (checkNextMove(core, player->x, player->y + 1) != 0)
-	  player->y++;
-      }
-    else
-      {
-	if (checkNextMove(core, player->x - 1, player->y) != 0)
-	  player->x--;
-	else if (checkNextMove(core, player->x + 1, player->y) != 0)
-	  player->x++;
-	else if (checkNextMove(core, player->x, player->y + 1) != 0)
-	  player->y++;
-      }
-  }
+    {
+      if (dir == 0)
+	{
+	  if (checkNextMove(core, player->x + 1, player->y) != 0)
+	    player->x++;
+	  else if (checkNextMove(core, player->x - 1, player->y) != 0)
+	    player->x--;
+	  else if (checkNextMove(core, player->x, player->y + 1) != 0)
+	    player->y++;
+	}
+      else
+	{
+	  if (checkNextMove(core, player->x - 1, player->y) != 0)
+	    player->x--;
+	  else if (checkNextMove(core, player->x + 1, player->y) != 0)
+	    player->x++;
+	  else if (checkNextMove(core, player->x, player->y + 1) != 0)
+	    player->y++;
+	}
+    }
   else
     player->y--;
 }

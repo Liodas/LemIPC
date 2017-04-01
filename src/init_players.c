@@ -10,7 +10,8 @@
 
 #include "lemipc.h"
 
-void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
+void		initNewPlayer(t_struct *core, t_player *player,
+			      int idTeam)
 {
   int		i;
 
@@ -26,10 +27,10 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
       i = player->y * 50 + player->x;
     }
   if (checkNewTeam(core, idTeam) == 1)
-  {
-    core->addr->teams += 1;
-    (core->addr->checkTeams == 1 ? core->addr->checkTeams = 0 : 0);
-  }
+    {
+      core->addr->teams += 1;
+      (core->addr->checkTeams == 1 ? core->addr->checkTeams = 0 : 0);
+    }
   core->addr->map[i] = idTeam;
   core->addr->players += 1;
 }

@@ -18,24 +18,24 @@ assigned to the current player\n");
   return (-1);
 }
 
-void    setTeamColor(sfRectangleShape *rect, int nb)
+void		setTeamColor(sfRectangleShape *rect, int nb)
 {
-  sfColor color;
+  sfColor	color;
 
   (nb == 0 ? color = sfRed :
    nb == 1 ? color = sfGreen :
-    nb == 2 ? color = sfBlue :
-     nb == 3 ? color = sfYellow :
-      nb == 4 ? color = sfMagenta :
-       nb == 5 ? color = sfCyan :
-        (color = sfWhite));
+   nb == 2 ? color = sfBlue :
+   nb == 3 ? color = sfYellow :
+   nb == 4 ? color = sfMagenta :
+   nb == 5 ? color = sfCyan :
+   (color = sfWhite));
   sfRectangleShape_setFillColor(rect, color);
 }
 
-void    drawSquare(int x, int y, t_graph *graph, int nb)
+void		drawSquare(int x, int y, t_graph *graph, int nb)
 {
-  sfVector2f pos;
-  sfVector2f size;
+  sfVector2f	pos;
+  sfVector2f	size;
 
   pos.x = x * 3;
   pos.y = y * 3;
@@ -63,27 +63,27 @@ void		displayMap(int *map, t_graph *graph)
       y = -1;
       while (++y < MAP_SIZE)
 	{
-    drawSquare(0, y, graph, 10);
+	  drawSquare(0, y, graph, 10);
 	  i = y * MAP_SIZE + x;
 	  map[i] != 0 ? drawSquare(x + 1, y + 1, graph, map[i]) : (void)0;
 	}
-    drawSquare(y, x + 1, graph, 10);
+      drawSquare(y, x + 1, graph, 10);
     }
-   x = -1;
-   while (++x <= MAP_SIZE)
+  x = -1;
+  while (++x <= MAP_SIZE)
     drawSquare(x, y, graph, 10);
-   sfRenderWindow_display(graph->win);
+  sfRenderWindow_display(graph->win);
 }
 
-void    timeDislayMap(t_struct *core, t_graph *graph)
+void			timeDislayMap(t_struct *core, t_graph *graph)
 {
-  static clock_t t1 = SPEED;
-  clock_t t2;
+  static clock_t	t1 = SPEED;
+  clock_t		t2;
 
   t2 = clock();
   if (t2 - t1 >= SPEED)
-  {
-    displayMap(core->addr->map, graph);
-    t1 = clock();
-  }
+    {
+      displayMap(core->addr->map, graph);
+      t1 = clock();
+    }
 }

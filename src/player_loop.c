@@ -66,7 +66,7 @@ void  playerLoop(t_struct *core, t_player *player)
 	  if (checkAround(core, *player, 1) > 1)
 	    {
 	      i_die_msg(core, player);
-        (checkNewTeam(core, player->team) == 1 ? core->addr->teams-- : 0);
+	      (checkNewTeam(core, player->team) == 1 ? core->addr->teams-- : 0);
 	      return;
 	    }
 	  else
@@ -93,7 +93,7 @@ void		firstPlayerLoop(t_struct *core, t_player *player)
 	  if (checkAround(core, *player, 1) > 1)
 	    {
 	      i_die_msg(core, player);
-        (checkNewTeam(core, player->team) == 1 ? core->addr->teams-- : 0);
+	      (checkNewTeam(core, player->team) == 1 ? core->addr->teams-- : 0);
 	      go_on = 0;
 	    }
 	  else
@@ -102,6 +102,6 @@ void		firstPlayerLoop(t_struct *core, t_player *player)
 	      move(core, player);
 	    }
 	}
-    displayAll(core);
+      displayAll(core);
     }
 }

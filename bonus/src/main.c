@@ -12,7 +12,7 @@
 
 void		freeIPCS(t_struct *core)
 {
-  char *str;
+  char		*str;
 
   str = (char *) calloc(14, 1);
   sprintf(str, "ipcrm -m %d", core->shmId);
@@ -36,9 +36,9 @@ int		checkNewTeam(t_struct *core, int idTeam)
   return (1);
 }
 
-void  semOperation(t_struct *core, int op)
+void		semOperation(t_struct *core, int op)
 {
-  struct sembuf sops;
+  struct sembuf	sops;
 
   sops.sem_num = 0;
   sops.sem_flg = 0;
@@ -46,19 +46,19 @@ void  semOperation(t_struct *core, int op)
   semop(core->semId, &sops, 1);
 }
 
-int  checkPressedKey(t_graph *graph)
+int		checkPressedKey(t_graph *graph)
 {
-  sfEvent event;
+  sfEvent	event;
 
   while (sfRenderWindow_pollEvent(graph->win, &event))
-  {
-    if (event.type == sfEvtClosed ||
-       (event.type == sfEvtKeyPressed && event.key.code == sfKeyEscape))
-      {
-        sfRenderWindow_close(graph->win);
-        return (0);
-      }
-  }
+    {
+      if (event.type == sfEvtClosed ||
+	  (event.type == sfEvtKeyPressed && event.key.code == sfKeyEscape))
+	{
+	  sfRenderWindow_close(graph->win);
+	  return (0);
+	}
+    }
   return (1);
 }
 

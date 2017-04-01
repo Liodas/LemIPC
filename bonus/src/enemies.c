@@ -15,7 +15,7 @@ int		countEnemies(t_struct *core, t_player pos, int inRange)
   int		i;
   int		x;
   int		y;
-  int   nbEnem;
+  int		nbEnem;
 
   nbEnem = 0;
   y = pos.y - inRange - 1;
@@ -25,7 +25,8 @@ int		countEnemies(t_struct *core, t_player pos, int inRange)
       while (++x <= pos.x + inRange)
 	{
 	  i = y * MAP_SIZE + x;
-	  if (y >= 0 && x >= 0 && i < MAP_SIZE * MAP_SIZE && core->addr->map[i] != EMPTY &&
+	  if (y >= 0 && x >= 0 && i < MAP_SIZE * MAP_SIZE &&
+	      core->addr->map[i] != EMPTY &&
 	      core->addr->map[i] == pos.team)
             nbEnem++;
         }
@@ -33,7 +34,7 @@ int		countEnemies(t_struct *core, t_player pos, int inRange)
   return (nbEnem);
 }
 
-int       getEnemyPosition(t_struct *core, t_player player,
+int		getEnemyPosition(t_struct *core, t_player player,
 			   t_player *pos, int inRange)
 {
   int		i;

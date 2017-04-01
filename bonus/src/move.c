@@ -15,7 +15,7 @@ int		checkAround(t_struct *core, t_player player, int inRange)
   int		i;
   int		x;
   int		y;
-  t_player tmp;
+  t_player	tmp;
 
   tmp.x = player.x;
   tmp.y = player.y;
@@ -26,7 +26,8 @@ int		checkAround(t_struct *core, t_player player, int inRange)
       while (++x <= player.x + inRange)
 	{
 	  i = y * MAP_SIZE + x;
-	  if (y >= 0 && x >= 0 && i < MAP_SIZE * MAP_SIZE && core->addr->map[i] != EMPTY &&
+	  if (y >= 0 && x >= 0 && i < MAP_SIZE * MAP_SIZE &&
+	      core->addr->map[i] != EMPTY &&
 	      core->addr->map[i] != player.team)
 	    {
 	      tmp.team = core->addr->map[i];
@@ -62,9 +63,9 @@ void	tryMoveDiagonale(t_struct *core, t_player *player, t_player pos, int dir)
     }
 }
 
-void  tryMove(t_struct *core, t_player *player, t_player pos)
+void	tryMove(t_struct *core, t_player *player, t_player pos)
 {
-  int dir;
+  int	dir;
 
   dir = rand() % 2;
   core->addr->map[player->y * MAP_SIZE + player->x] = 0;
@@ -81,11 +82,11 @@ void  tryMove(t_struct *core, t_player *player, t_player pos)
   core->addr->map[player->y * MAP_SIZE + player->x] = player->team;
 }
 
-void  move(t_struct *core, t_player *player)
+void		move(t_struct *core, t_player *player)
 {
-  t_player pos;
-  int enemies;
-  int allies;
+  t_player	pos;
+  int		enemies;
+  int		allies;
 
   enemies = findClosestEnemy(core, player, &pos);
   allies = checkAroundAllies(core, *player, 5);

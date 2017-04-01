@@ -41,12 +41,13 @@ int		initValues(t_struct *core, char *path, int idTeam)
   initMsg(core);
   if (initSem(core) == -1)
     return (-1);
-  if ((core->shmId = shmget(core->key, sizeof(t_shared)
-      + MAP_SIZE * MAP_SIZE * sizeof(int), SHM_R | SHM_W)) == -1)
+  if ((core->shmId =
+       shmget(core->key, sizeof(t_shared)
+	      + MAP_SIZE * MAP_SIZE * sizeof(int), SHM_R | SHM_W)) == -1)
     {
       if ((core->shmId = shmget(core->key, sizeof(t_shared)
-          + MAP_SIZE * MAP_SIZE * sizeof(int),
-          IPC_CREAT | SHM_R | SHM_W)) != -1)
+				+ MAP_SIZE * MAP_SIZE * sizeof(int),
+				IPC_CREAT | SHM_R | SHM_W)) != -1)
 	if (initFirstPlayer(core, idTeam) == -1)
 	  return (-1);
     }

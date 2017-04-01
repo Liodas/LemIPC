@@ -40,10 +40,10 @@ int		initValues(t_struct *core, char *path, int idTeam)
   if (initSem(core) == -1)
     return (-1);
   if ((core->shmId = shmget(core->key, sizeof(t_shared)
-      + 50 * 50 * sizeof(int), SHM_R | SHM_W)) == -1)
+			    + 50 * 50 * sizeof(int), SHM_R | SHM_W)) == -1)
     {
       if ((core->shmId = shmget(core->key, sizeof(t_shared)
-      + 50 * 50 * sizeof(int), IPC_CREAT | SHM_R | SHM_W)) != -1)
+				+ 50 * 50 * sizeof(int), IPC_CREAT | SHM_R | SHM_W)) != -1)
 	if (initFirstPlayer(core, idTeam) == -1)
 	  return (-1);
     }
