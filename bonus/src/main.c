@@ -5,10 +5,12 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:28:14 2017 gastal_r
-** Last update	Sat Apr 01 17:31:23 2017 gastal_r
+** Last update	Sat Apr 01 22:56:20 2017 gastal_r
 */
 
 #include      "lemipc.h"
+
+extern int sig_check;
 
 void		freeIPCS(t_struct *core)
 {
@@ -18,7 +20,6 @@ void		freeIPCS(t_struct *core)
     perror("");
   if (msgctl(core->msgId, IPC_RMID, 0) < 0)
     perror("");
-  system("killall lemipc");
 }
 
 int		checkNewTeam(t_struct *core, int idTeam)
@@ -42,7 +43,7 @@ void		semOperation(t_struct *core, int op)
   semop(core->semId, &sops, 1);
 }
 
-int		checkPressedKey(t_graph *graph)
+int		checkEvent(t_struct *core, t_graph *graph)
 {
   sfEvent	event;
 
@@ -51,7 +52,10 @@ int		checkPressedKey(t_graph *graph)
       if (event.type == sfEvtClosed ||
 	  (event.type == sfEvtKeyPressed && event.key.code == sfKeyEscape))
 	{
-	  sfRenderWindow_close(graph->win);
+    sig_check = 1;
+    core->addr->teams = 1;
+    core->addr->checkTeams = 0;
+    sfRenderWindow_close(graph->win);
 	  return (0);
 	}
     }

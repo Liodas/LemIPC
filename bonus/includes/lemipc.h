@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:30:19 2017 gastal_r
-** Last update	Sat Apr 01 10:46:01 2017 gastal_r
+** Last update	Sat Apr 01 22:54:01 2017 gastal_r
 */
 
 #ifndef     __LEMIPC_H__
@@ -21,7 +21,8 @@
 # include   <stdlib.h>
 # include   <unistd.h>
 # include   <time.h>
-#include    <SFML/Graphics.h>
+# include   <SFML/Graphics.h>
+# include   <signal.h>
 
 # define    EMPTY 0
 # define    WINDOW_SIZE 756
@@ -92,7 +93,8 @@ void	move(t_struct *, t_player *);
 void	timeDislayMap(t_struct *, t_graph *);
 void	firstPlayerLoop(t_struct *, t_player *, t_graph *);
 void	playerLoop(t_struct *, t_player *);
-int	checkPressedKey(t_graph *);
+int	checkEvent(t_struct *, t_graph *);
+void	signalHandler(int type);
 void	freeIPCS(t_struct *);
 
 #endif

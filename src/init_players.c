@@ -5,10 +5,12 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Sat Apr 01 12:01:31 2017 gastal_r
+** Last update	Sat Apr 01 23:05:15 2017 gastal_r
 */
 
 #include "lemipc.h"
+
+extern int	sig_check;
 
 void		initNewPlayer(t_struct *core, t_player *player,
 			      int idTeam)
@@ -47,9 +49,14 @@ int		initFirstPlayer(t_struct *core, int idTeam)
   core->addr->players = 1;
   core->addr->teams = 1;
   core->addr->checkTeams = 1;
+  signal(SIGINT, signalHandler);
   firstPlayerLoop(core, &player);
   while (core->addr->teams > 1)
-    timeDislayMap(core);
+    {
+      if (sig_check == 1)
+	thanksNorme(core);
+      timeDislayMap(core);
+    }
   printf("\033[2J\033[1;1H");
   displayMap(core->addr->map);
   freeIPCS(core);

@@ -10,6 +10,8 @@
 
 #include    "lemipc.h"
 
+extern int	sig_check;
+
 void	i_die_msg(t_struct *core, t_player *player)
 {
   t_msg	msg;
@@ -80,6 +82,12 @@ void		playerLoop(t_struct *core, t_player *player)
     }
 }
 
+void		thanksNorme(t_struct *core)
+{
+  core->addr->teams = 1;
+  core->addr->checkTeams = 0;
+}
+
 void		firstPlayerLoop(t_struct *core, t_player *player)
 {
   int		go_on;
@@ -87,6 +95,8 @@ void		firstPlayerLoop(t_struct *core, t_player *player)
   go_on = 1;
   while (go_on && (core->addr->teams > 1 || core->addr->checkTeams))
     {
+      if (sig_check == 1)
+	thanksNorme(core);
       usleep(SPEED * 2);
       if (semctl(core->semId, 0, GETVAL) == 1)
 	{

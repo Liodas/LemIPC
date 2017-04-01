@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 22:55:09 2017 gastal_r
-** Last update	Sat Apr 01 12:38:17 2017 gastal_r
+** Last update	Sat Apr 01 22:54:17 2017 gastal_r
 */
 
 #include    "lemipc.h"
@@ -86,7 +86,7 @@ void		firstPlayerLoop(t_struct *core, t_player *player, t_graph *graph)
   go_on = 1;
   while (go_on && (core->addr->teams > 1 || core->addr->checkTeams))
     {
-      if (!checkPressedKey(graph))
+      if (!checkEvent(core, graph))
 	return;
       usleep(SPEED * 2);
       if (semctl(core->semId, 0, GETVAL) == 1)

@@ -5,10 +5,12 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:20:24 2017 sellet_f
-** Last update	Sat Apr 01 12:01:28 2017 gastal_r
+** Last update	Sat Apr 01 22:54:06 2017 gastal_r
 */
 
 #include "lemipc.h"
+
+extern int	sig_check;
 
 void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
 {
@@ -66,10 +68,11 @@ int		initFirstPlayer(t_struct *core, int idTeam)
   core->addr->teams = 1;
   core->addr->checkTeams = 1;
   initGraph(&graph);
+  signal(SIGINT, signalHandler);
   firstPlayerLoop(core, &player, &graph);
   while (sfRenderWindow_isOpen(graph.win))
     {
-      checkPressedKey(&graph);
+      checkEvent(core, &graph);
       timeDislayMap(core, &graph);
     }
   freeGraph(&graph);

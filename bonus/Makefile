@@ -28,6 +28,7 @@ SRCS		=	src/main.c		\
 			src/player_loop.c	\
 			src/move.c		\
 			src/aff_func.c		\
+			src/signal.c			\
 			src/tryMoveDirections.c
 
 OBJS		=	$(SRCS:.c=.o)

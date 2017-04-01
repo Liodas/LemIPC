@@ -8,22 +8,23 @@
 ** Last update	Sat Apr 01 11:56:57 2017 gastal_r
 */
 
-#ifndef     __LEMIPC_H__
-# define    __LEMIPC_H__
+#ifndef		__LEMIPC_H__
+# define	__LEMIPC_H__
 
-# include   <sys/types.h>
-# include   <sys/ipc.h>
-# include   <sys/sem.h>
-# include   <sys/shm.h>
-# include   <sys/msg.h>
-# include   <stdio.h>
-# include   <string.h>
-# include   <stdlib.h>
-# include   <unistd.h>
-# include   <time.h>
+# include	<sys/types.h>
+# include	<sys/ipc.h>
+# include	<sys/sem.h>
+# include	<sys/shm.h>
+# include	<sys/msg.h>
+# include	<stdio.h>
+# include	<string.h>
+# include	<stdlib.h>
+# include	<unistd.h>
+# include	<time.h>
+# include	<signal.h>
 
-# define    EMPTY 0
-# define    SPEED 5000
+# define	EMPTY 0
+# define	SPEED 5000
 
 typedef struct			s_msg
 {
@@ -56,34 +57,36 @@ typedef struct			s_struct
   t_shared			*addr;
 }				t_struct;
 
-int	getEnemyPosition(t_struct *, t_player, t_player *, int);
-int	findClosestAllies(t_struct *, t_player *, t_player *);
-int	findClosestEnemy(t_struct *, t_player *, t_player *);
-int	checkAroundAllies(t_struct *, t_player, int);
-void	initNewPlayer(t_struct *, t_player *, int);
-void	tryMoveRight(t_struct *, t_player *, int);
-void	tryMoveLeft(t_struct *, t_player *, int);
-void	tryMoveDown(t_struct *, t_player *, int);
-int	countEnemies(t_struct *, t_player, int);
-void	firstPlayerLoop(t_struct *, t_player *);
-int	checkAround(t_struct *, t_player, int);
-void	tryMoveUp(t_struct *, t_player *, int);
-int	initValues(t_struct *, char *, int);
-void	playerLoop(t_struct *, t_player *);
-void	playerLoop(t_struct *, t_player *);
-void	i_die_msg(t_struct *, t_player *);
-int	initFirstPlayer(t_struct *, int);
-void	semOperation(t_struct *, int );
-int	checkNewTeam(t_struct *, int);
-int	initOtherPlayers(t_struct *);
-void	move(t_struct *, t_player *);
-void	timeDislayMap(t_struct *);
-void	displayAll(t_struct *);
-void	freeIPCS(t_struct *);
-int	initMsg(t_struct *);
-int	initSem(t_struct *);
-void	initMap(t_struct *);
-void	displayMap(int *);
-int	printUsage();
+int		getEnemyPosition(t_struct *, t_player, t_player *, int);
+int		findClosestAllies(t_struct *, t_player *, t_player *);
+int		findClosestEnemy(t_struct *, t_player *, t_player *);
+int		checkAroundAllies(t_struct *, t_player, int);
+void		initNewPlayer(t_struct *, t_player *, int);
+void		tryMoveRight(t_struct *, t_player *, int);
+void		tryMoveLeft(t_struct *, t_player *, int);
+void		tryMoveDown(t_struct *, t_player *, int);
+int		countEnemies(t_struct *, t_player, int);
+void		firstPlayerLoop(t_struct *, t_player *);
+int		checkAround(t_struct *, t_player, int);
+void		tryMoveUp(t_struct *, t_player *, int);
+int		initValues(t_struct *, char *, int);
+void		playerLoop(t_struct *, t_player *);
+void		playerLoop(t_struct *, t_player *);
+void		i_die_msg(t_struct *, t_player *);
+int		initFirstPlayer(t_struct *, int);
+void		semOperation(t_struct *, int );
+int		checkNewTeam(t_struct *, int);
+int		initOtherPlayers(t_struct *);
+void		move(t_struct *, t_player *);
+void		timeDislayMap(t_struct *);
+void		thanksNorme(t_struct *);
+void		displayAll(t_struct *);
+void		freeIPCS(t_struct *);
+int		initMsg(t_struct *);
+int		initSem(t_struct *);
+void		initMap(t_struct *);
+void		signalHandler(int);
+void		displayMap(int *);
+int		printUsage();
 
 #endif
