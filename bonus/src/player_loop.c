@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 22:55:09 2017 gastal_r
-** Last update	Sat Apr 01 12:13:20 2017 gastal_r
+** Last update	Sat Apr 01 12:38:17 2017 gastal_r
 */
 
 #include    "lemipc.h"
@@ -73,8 +73,6 @@ void  playerLoop(t_struct *core, t_player *player)
 	      if (player->id != 1
           && semctl(core->semId, 0, GETVAL) == core->addr->players)
 	       semOperation(core, -core->addr->players + 1);
-	      else if (player->id == 1 && core->addr->players == 1)
-	       return;
 	      else
 	       semOperation(core, 1);
 	    }
