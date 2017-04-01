@@ -62,12 +62,12 @@ int		getEnemyPosition(t_struct *core, t_player player,
   return (0);
 }
 
-int       findClosestEnemy(t_struct *core, t_player *player,
+int		findClosestEnemy(t_struct *core, t_player *player,
 			   t_player *pos)
 {
-  int     nb;
-  int     i;
-  int     rt;
+  int		nb;
+  int		i;
+  int		rt;
 
   i = 0;
   while ((rt = getEnemyPosition(core, *player, pos, i)) == 0 && i < MAP_SIZE)

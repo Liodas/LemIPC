@@ -10,7 +10,7 @@
 
 #include      "lemipc.h"
 
-int             checkAround(t_struct *core, t_player player, int inRange)
+int		checkAround(t_struct *core, t_player player, int inRange)
 {
   int		i;
   int		x;

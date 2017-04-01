@@ -55,7 +55,7 @@ void		displayMap(int *map, t_graph *graph)
 
   sfRenderWindow_clear(graph->win, sfBlack);
   x = -1;
-  while (++x < MAP_SIZE + 1)
+  while (++x < MAP_SIZE + 2)
     drawSquare(x, 0, graph, 10);
   x = -1;
   while (++x < MAP_SIZE)
@@ -63,15 +63,15 @@ void		displayMap(int *map, t_graph *graph)
       y = -1;
       while (++y < MAP_SIZE)
 	{
-	  drawSquare(0, y, graph, 10);
+	  drawSquare(0, y + 1, graph, 10);
 	  i = y * MAP_SIZE + x;
 	  map[i] != 0 ? drawSquare(x + 1, y + 1, graph, map[i]) : (void)0;
 	}
-      drawSquare(y, x + 1, graph, 10);
+      drawSquare(y + 1, x + 1, graph, 10);
     }
   x = -1;
-  while (++x <= MAP_SIZE)
-    drawSquare(x, y, graph, 10);
+  while (++x <= MAP_SIZE + 1)
+    drawSquare(x, y + 1, graph, 10);
   sfRenderWindow_display(graph->win);
 }
 

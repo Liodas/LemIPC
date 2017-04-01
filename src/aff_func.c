@@ -46,7 +46,7 @@ void		displayMap(int *map)
   printf("-\n");
 }
 
-void      displayAll(t_struct *core)
+void			displayAll(t_struct *core)
 {
   printf("\033[2J\033[1;1H");
   displayMap(core->addr->map);

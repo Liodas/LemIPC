@@ -41,7 +41,7 @@ typedef struct			s_player
 
 typedef struct			s_shared
 {
-  int       checkTeams;
+  int				checkTeams;
   int				players;
   int				teams;
   int				map[0];
@@ -77,12 +77,12 @@ void	semOperation(t_struct *, int );
 int	checkNewTeam(t_struct *, int);
 int	initOtherPlayers(t_struct *);
 void	move(t_struct *, t_player *);
-void    timeDislayMap(t_struct *);
+void	timeDislayMap(t_struct *);
+void	displayAll(t_struct *);
 void	freeIPCS(t_struct *);
 int	initMsg(t_struct *);
 int	initSem(t_struct *);
 void	initMap(t_struct *);
-void      displayAll(t_struct *);
 void	displayMap(int *);
 int	printUsage();
 

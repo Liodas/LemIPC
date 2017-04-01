@@ -39,7 +39,8 @@ int		checkAround(t_struct *core, t_player player, int inRange)
   return (0);
 }
 
-void	tryMoveDiagonale(t_struct *core, t_player *player, t_player pos, int dir)
+void		tryMoveDiagonale(t_struct *core, t_player *player,
+				 t_player pos, int dir)
 {
   if (pos.x < player->x && pos.y < player->y)
     {

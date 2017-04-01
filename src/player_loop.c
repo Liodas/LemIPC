@@ -54,7 +54,7 @@ void	checkMessage(t_struct *core, t_player *player)
     }
 }
 
-void  playerLoop(t_struct *core, t_player *player)
+void		playerLoop(t_struct *core, t_player *player)
 {
   while (core->addr->teams > 1 || core->addr->checkTeams)
     {

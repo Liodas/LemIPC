@@ -24,7 +24,7 @@
 #include    <SFML/Graphics.h>
 
 # define    EMPTY 0
-# define    VIDEO_MOD {800, 800, 32}
+# define    WINDOW_SIZE 756
 # define    MAP_SIZE 250
 # define    SPEED 5000
 
@@ -50,7 +50,7 @@ typedef struct			s_player
 
 typedef struct			s_shared
 {
-  int       checkTeams;
+  int				checkTeams;
   int				players;
   int				teams;
   int				map[0];
@@ -89,10 +89,10 @@ int	getEnemyPosition(t_struct *, t_player, t_player *, int);
 int	findClosestEnemy(t_struct *, t_player *, t_player *);
 int	checkNewTeam(t_struct *, int);
 void	move(t_struct *, t_player *);
-void    timeDislayMap(t_struct *, t_graph *);
-void		firstPlayerLoop(t_struct *, t_player *, t_graph *);
-void  playerLoop(t_struct *, t_player *);
-int  checkPressedKey(t_graph *);
-void		freeIPCS(t_struct *);
+void	timeDislayMap(t_struct *, t_graph *);
+void	firstPlayerLoop(t_struct *, t_player *, t_graph *);
+void	playerLoop(t_struct *, t_player *);
+int	checkPressedKey(t_graph *);
+void	freeIPCS(t_struct *);
 
 #endif

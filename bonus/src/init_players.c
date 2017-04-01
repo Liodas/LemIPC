@@ -36,13 +36,17 @@ void		initNewPlayer(t_struct *core, t_player *player, int idTeam)
 
 void		initGraph(t_graph *graph)
 {
-  sfVideoMode	mode = VIDEO_MOD;
+  sfVideoMode	mode;
+
+  mode.width = WINDOW_SIZE;
+  mode.height = WINDOW_SIZE;
+  mode.bitsPerPixel = 32;
   graph->win = sfRenderWindow_create(mode, "LemIPC", sfResize | sfClose, NULL);
   sleep(1);
   graph->rect = sfRectangleShape_create();
 }
 
-void  freeGraph(t_graph *graph)
+void		freeGraph(t_graph *graph)
 {
   sfRenderWindow_destroy(graph->win);
   sfRectangleShape_destroy(graph->rect);

@@ -53,7 +53,7 @@ void	checkMessage(t_struct *core, t_player *player)
     }
 }
 
-void  playerLoop(t_struct *core, t_player *player)
+void		playerLoop(t_struct *core, t_player *player)
 {
   while (core->addr->teams > 1 || core->addr->checkTeams)
     {
@@ -87,7 +87,7 @@ void		firstPlayerLoop(t_struct *core, t_player *player, t_graph *graph)
   while (go_on && (core->addr->teams > 1 || core->addr->checkTeams))
     {
       if (!checkPressedKey(graph))
-	return;;
+	return;
       usleep(SPEED * 2);
       if (semctl(core->semId, 0, GETVAL) == 1)
 	{
