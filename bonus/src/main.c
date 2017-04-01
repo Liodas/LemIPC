@@ -65,11 +65,14 @@ int  checkPressedKey(t_graph *graph)
 int		main(int ac, char *av[])
 {
   t_struct	core;
+  int		idTeam;
 
   if (ac != 3)
     return (printUsage());
   core.addr = NULL;
   srand(time(NULL));
+  if ((idTeam = atoi(av[2])) <= 0)
+    return (printUsage());
   if (initValues(&core, av[1], atoi(av[2])) == -1)
     return (-1);
   return (0);
