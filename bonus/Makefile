@@ -13,9 +13,9 @@ CC		=       gcc
 
 RM		=       rm -rf
 
-CFLAGS		+=	-Wall -Wextra -W #-Werror
+CFLAGS		+=	-Wall -Wextra -W -Werror
 CFLAGS		+=	-I./includes
-CFLAGS        +=      -lcsfml-{graphics,window,system}
+CFLAGS	        +=      -lcsfml-{graphics,window,system}
 
 
 NAME		=	lemipc

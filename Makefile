@@ -13,7 +13,7 @@ CC		=       gcc
 
 RM		=       rm -rf
 
-CFLAGS		+=	-Wall -Wextra -W #-Werror
+CFLAGS		+=	-Wall -Wextra -W -Werror
 CFLAGS		+=	-I./includes
 
 NAME		=	lemipc
