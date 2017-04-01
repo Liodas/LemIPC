@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 23:04:16 2017 gastal_r
-** Last update	Fri Mar 31 15:06:59 2017 gastal_r
+** Last update	Sat Apr 01 12:14:06 2017 gastal_r
 */
 
 #include    "lemipc.h"
@@ -77,11 +77,11 @@ void		displayMap(int *map, t_graph *graph)
 
 void    timeDislayMap(t_struct *core, t_graph *graph)
 {
-  static clock_t t1 = -100;
+  static clock_t t1 = SPEED;
   clock_t t2;
 
   t2 = clock();
-  if (t2 - t1 >= 100)
+  if (t2 - t1 >= SPEED)
   {
     displayMap(core->addr->map, graph);
     t1 = clock();

@@ -5,30 +5,10 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 22:55:09 2017 gastal_r
-** Last update	Fri Mar 31 19:20:52 2017 gastal_r
+** Last update	Sat Apr 01 12:13:20 2017 gastal_r
 */
 
 #include    "lemipc.h"
-
-int   waitNewTeam(t_struct *core, t_player *player)
-{
-  static int check = 0;
-  int i;
-
-  if (check == 0)
-  {
-    i = -1;
-    while (++i < 50 * 50)
-    {
-      if (core->addr->map[i] != 0 && core->addr->map[i] != player->team)
-        {
-          check = 1;
-          return (0);
-        }
-    }
-  }
-  return (1);
-}
 
 void  i_die_msg(t_struct *core, t_player *player)
 {
@@ -75,7 +55,7 @@ if (strlen(msg.str) > 0)
 
 void  playerLoop(t_struct *core, t_player *player)
 {
-  while (core->addr->teams > 1)
+  while (core->addr->teams > 1 || core->addr->checkTeams)
     {
       usleep(1000);
       checkMessage(core, player);
@@ -94,7 +74,7 @@ void  playerLoop(t_struct *core, t_player *player)
           && semctl(core->semId, 0, GETVAL) == core->addr->players)
 	       semOperation(core, -core->addr->players + 1);
 	      else if (player->id == 1 && core->addr->players == 1)
-	       exit(0);
+	       return;
 	      else
 	       semOperation(core, 1);
 	    }
@@ -106,11 +86,11 @@ void		firstPlayerLoop(t_struct *core, t_player *player, t_graph *graph)
   int go_on;
 
   go_on = 1;
-  while (go_on)
+  while (go_on && (core->addr->teams > 1 || core->addr->checkTeams))
   {
     if (!checkPressedKey(graph))
       return;;
-    usleep(SPEED);
+    usleep(SPEED * 2);
      if (semctl(core->semId, 0, GETVAL) == 1)
     {
       if (checkAround(core, *player, 1) > 1)
@@ -125,6 +105,6 @@ void		firstPlayerLoop(t_struct *core, t_player *player, t_graph *graph)
 	      move(core, player);
 	    }
     }
-    timeDislayMap(core, graph);
+    displayMap(core->addr->map, graph);
   }
 }

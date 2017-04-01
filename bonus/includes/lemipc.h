@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Sun Mar 26 12:30:19 2017 gastal_r
-** Last update	Fri Mar 31 14:52:21 2017 gastal_r
+** Last update	Sat Apr 01 10:46:01 2017 gastal_r
 */
 
 #ifndef     __LEMIPC_H__
@@ -50,6 +50,7 @@ typedef struct			s_player
 
 typedef struct			s_shared
 {
+  int       checkTeams;
   int				players;
   int				teams;
   int				map[0];

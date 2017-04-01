@@ -5,30 +5,10 @@
 ** Login   <flavien.sellet@epitech.eu>
 **
 ** Started on  Tue Mar 28 13:02:38 2017 sellet_f
-** Last update	Fri Mar 31 15:29:04 2017 gastal_r
+** Last update	Sat Apr 01 10:33:03 2017 gastal_r
 */
 
 #include "lemipc.h"
-
-void    initMap(t_struct *core)
-{
-  bzero(core->addr->map, MAP_SIZE * MAP_SIZE);
-  return;
-  int		x;
-  int		y;
-  int		i;
-
-  x = -1;
-  while (++x < MAP_SIZE)
-    {
-      y = -1;
-      while (++y < MAP_SIZE)
-	{
-	  i = y * MAP_SIZE + x;
-	  core->addr->map[i] = EMPTY;
-	}
-    }
-}
 
 int		initSem(t_struct *core)
 {

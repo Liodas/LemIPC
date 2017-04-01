@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 23:04:16 2017 gastal_r
-** Last update	Fri Mar 31 18:35:25 2017 gastal_r
+** Last update	Sat Apr 01 11:47:38 2017 gastal_r
 */
 
 #include    "lemipc.h"
@@ -46,17 +46,22 @@ void		displayMap(int *map)
   printf("-\n");
 }
 
+void      displayAll(t_struct *core)
+{
+  printf("\033[2J\033[1;1H");
+  displayMap(core->addr->map);
+  printf("teams = %d\n", core->addr->teams);
+}
+
 void			timeDislayMap(t_struct *core)
 {
-  static clock_t	t1 = -10000;
+  static clock_t	t1 = 10000;
   clock_t		t2;
 
   t2 = clock();
   if (t2 - t1 >= 10000)
     {
-      printf("\033[2J\033[1;1H");
-      displayMap(core->addr->map);
-      printf("teams = %d\n", core->addr->teams);
+      displayAll(core);
       t1 = clock();
     }
 }

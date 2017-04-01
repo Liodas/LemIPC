@@ -5,7 +5,7 @@
 ** Login	gastal_r
 **
 ** Started on	Thu Mar 30 22:58:09 2017 gastal_r
-** Last update	Fri Mar 31 13:15:56 2017 gastal_r
+** Last update	Sat Apr 01 12:19:57 2017 gastal_r
 */
 
 #include      "lemipc.h"
@@ -88,7 +88,7 @@ void  move(t_struct *core, t_player *player)
   int allies;
 
   enemies = findClosestEnemy(core, player, &pos);
-  allies = checkAroundAllies(core, *player, 5);
+  allies = checkAroundAllies(core, *player, 10);
   if (enemies != 0 && enemies <= allies && allies > 1)
     {
       tryMove(core, player, pos);
